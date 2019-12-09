@@ -1,0 +1,6 @@
+
+LENGTH=${1:-16}
+NUMBER=${2:-${LENGTH}}
+## TODO : type=int
+
+apg -a 1 -M n -n $NUMBER -m $LENGTH -x $LENGTH -E 23456789
