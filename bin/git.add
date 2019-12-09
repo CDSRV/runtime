@@ -1,0 +1,2 @@
+PATTERN=${PATTERN:-.}
+git add "${PATTERN}"

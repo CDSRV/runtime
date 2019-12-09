@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#set -x
+## revert everything to previous commit
+
+REF=${1:-HEAD}
+
+echo "WARNING : reset $(pwd) ${REF} ?"
+read GO
+git reset --hard #$REF
+git clean --force -d

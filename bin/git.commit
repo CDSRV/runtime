@@ -1,0 +1,3 @@
+MESSAGE="${MESSAGE:-$1}"
+
+git commit -m "${MESSAGE}"
