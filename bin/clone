@@ -1,0 +1,52 @@
+##
+#set -x
+set -a
+BASE=$HOME/src
+LIST=clone.list
+## if $1, use that and only add to LIST
+
+url.parse () {
+## https://stackoverflow.com/questions/6174220/parse-url-in-shell-script
+
+# extract the protocol
+proto="$(echo $1 | grep :// | sed -e's,^\(.*://\).*,\1,g')"
+# remove the protocol
+url="$(echo ${1/$proto/})"
+# extract the user (if any)
+user="$(echo $url | grep @ | cut -d@ -f1)"
+# extract the host and port
+hostport="$(echo ${url/$user@/} | cut -d/ -f1)"
+# by request host without port
+host="$(echo $hostport | sed -e 's,:.*,,g')"
+# by request - try to extract the port
+port="$(echo $hostport | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e 's,[^0-9],,g')"
+# extract the path (if any)
+path="$(echo $url | grep / | cut -d/ -f2-)"
+}
+
+sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' "$LIST" |
+while read ENTRY
+do
+## check for repo type 
+# case TYPE in ENTRY
+# echo "${ENTRY%%#*}"
+echo REPO_URL=$ENTRY
+TYPE="${ENTRY##*.}"
+#echo TYPE=$TYPE
+
+case $TYPE in
+git)
+url.parse $ENTRY ## exports components into current shell
+DEST=$BASE/$host/$(dirname $path)
+CMD="git clone --recurse-submodules"
+[ -d $DEST ] || mkdir -p $DEST
+[ -d $DEST/$(basename "${path%.*}") ] || (cd $DEST; echo DEST=$DEST; $CMD $ENTRY)
+;;
+*)
+echo "ERROR : unknown type"; exit 1
+;;
+esac
+
+done 
+
+echo DONE : $0 : $(date)
