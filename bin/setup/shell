@@ -1,0 +1,83 @@
+## PURPOSE: entrypoint for shell setup
+
+## REF: http://mywiki.wooledge.org/BashFAQ/028
+## REF: https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
+
+LS=/usr/bin/ls  ## ls is aliased in default shell env
+
+set +o xtrace
+
+## TODO: case SHELL
+## REF: https://stackoverflow.com/questions/3327013/how-to-determine-the-current-shell-im-working-on
+unset SHELL
+
+SHELL=$0
+
+[[ "$SHELL" = "bash" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
+
+unset CDPATH
+
+## REF: https://stackoverflow.com/questions/2683279/how-to-detect-if-a-script-is-being-sourced
+[[ ${BASH_VERSINFO[0]} -le 2 ]] && echo 'ERROR: No BASH_SOURCE array variable' && exit 1
+
+# exit if executed directly
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
+
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] && echo "INFO: script ${BASH_SOURCE[0]} is being sourced ..."
+
+## REF: ## REF: https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
+SOURCE="${BASH_SOURCE[0]}"
+
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+#
+
+echo "INFO: setting shell options"
+# set -o allexport
+# set -o xtrace
+set -o pipefail
+
+echo "INFO: setting WORKSPACE and PATH"
+export WORKSPACE=${WORKSPACE:-"$( cd "$DIR/../../" && pwd )"}
+
+( echo $PATH | grep $WORKSPACE &>/dev/null ) || export PATH=$WORKSPACE/bin:$PATH
+
+echo "INFO: importing functions"
+LIBS="$WORKSPACE/lib/"$(basename $SHELL)"/function/"
+for lib in $($LS $LIBS)
+do
+. $LIBS/$lib
+done
+ 
+echo "INFO: importing aliases"
+LIBS="$WORKSPACE/lib/"$(basename $SHELL)"/alias/"
+for lib in $($LS $LIBS)
+do
+. $LIBS/$lib
+done
+
+## TODO: import keymaps
+## TODO: import completions
+
+## info
+# check_interactive
+# if DEBUG set
+# list_functions
+# declare -A -p BASH_ALIASES
+# alias
+#: ULIMIT="
+#$(ulimit -a) 
+#: "
+#"
+#: UMASK=$(umask)
+
+## test
+require_interactive && echo "OK"
+
+## populate environment
+# determine OS distribution
