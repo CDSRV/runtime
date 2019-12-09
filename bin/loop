@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+## just a simple convenience script for running the same command over and over
+
+usage (){
+echo "#<< USAGE: loop \"command -ops args\" sleep-delay"; exit 1;
+}
+
+(( "$#" <= "1" )) && usage
+
+DELAY=$2
+DELAY=${DELAY:-5s}
+
+COUNT=1
+START=$(date)
+while	true
+do
+	clear
+	echo "##<< RUNNING: '"${1}"' :: DELAY=$DELAY COUNT=$COUNT"
+	echo "##<< START: $START"
+	COUNT=$((COUNT+1))
+	${1}
+	echo "##<< WAIT: $(date)"
+	sleep $DELAY
+done
