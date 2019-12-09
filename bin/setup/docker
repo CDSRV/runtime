@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+## PURPOSE: setup docker service itself
+## https://github.com/saltstack-formulas/docker-formula
+
+# check existing
+docker version ## 
+docker info
+docker status
+
+[ -e /etc/docker/daemon.json ] || write_template
+
+## setup docker package with correct options
+
+# check/invoke sudo
+
+# pull from upstream
+
+# set experimental mode
+
+# add users to docker group
+

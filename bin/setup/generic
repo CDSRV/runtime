@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#set -x
+
+## PURPOSE: entrypoint for generic setup
+
+[ -e /etc/os-release ] && . /etc/os-release
+
+case $ID in
+	fedora) OS_FAMILY=fedora;;
+esac #ID
+		
+case $OS_FAMILY in
+	darwin)
+		echo "ERROR: not supported"; exit 1
+		;;
+	fedora)
+		echo "INFO: supported"
+		;;
+	debian)
+		echo "ERROR: maybe"; exit 1
+		;;
+	*)
+		echo "ERROR: really?"; exit 1
+		;;
+esac #OS_FAMILY

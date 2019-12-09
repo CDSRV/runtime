@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -x
+
+## PURPOSE: entrypoint for python setup
+
+## REQUIREMENTS: 
+# - load OS packages v2 & v3
+# - load pip

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -x
+
+## PURPOSE: entrypoint for java setup
