@@ -1,0 +1,2 @@
+VCS=${VCS:-git}
+$VCS.diff

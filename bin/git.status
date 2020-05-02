@@ -1,1 +1,6 @@
-git status -vsb
+## ref: https://git-scm.com/docs/git-status
+
+MODE="--porcelain=v2" ## non-interactive
+
+[ -z $INTERACTIVE ] && unset MODE
+git status -vsb $MODE --ignored=matching

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -o xtrace
+## current environment
+WORKSPACE=$WORKSPACE
+
+## current path repository
+VCS=${VCS:-git}
+$VCS.status
+

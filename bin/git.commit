@@ -1,3 +1,7 @@
-MESSAGE="${MESSAGE:-$1}"
+#!/usr/bin/env bash
 
+[ -z $DEBUG ] || set -x
+
+MESSAGE=${MESSAGE:-$1}
+[ -z "${MESSAGE}" ] && MESSAGE=${MESSAGE:-.}
 git commit -m "${MESSAGE}"

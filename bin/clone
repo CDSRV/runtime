@@ -1,9 +1,15 @@
-##
+#!/usr/bin/env bash
 #set -x
 set -a
-BASE=$HOME/src
+[ -z $WORKSPACE ] && BASE=$HOME/src
 LIST=clone.list
 ## if $1, use that and only add to LIST
+# eg, clone http://repo.type CATALOG
+
+#CATALOG=${CATALOG:-${HOME}}
+#BASE=${CATALOG}/src
+#LIST=${BASE}/repo.list
+
 
 url.parse () {
 ## https://stackoverflow.com/questions/6174220/parse-url-in-shell-script
@@ -24,29 +30,35 @@ port="$(echo $hostport | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e 's,[
 path="$(echo $url | grep / | cut -d/ -f2-)"
 }
 
+## parse list
 sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' "$LIST" |
 while read ENTRY
-do
-## check for repo type 
+	do
+## check for repo type & set CMD accordingly
+## - git
+## - hg
+## - svn
+## - cvs
 # case TYPE in ENTRY
 # echo "${ENTRY%%#*}"
-echo REPO_URL=$ENTRY
-TYPE="${ENTRY##*.}"
-#echo TYPE=$TYPE
+	echo REPO_URL=$ENTRY
+	TYPE="${ENTRY##*.}"
+# echo TYPE=$TYPE
 
-case $TYPE in
-git)
-url.parse $ENTRY ## exports components into current shell
-DEST=$BASE/$host/$(dirname $path)
-CMD="git clone --recurse-submodules"
-[ -d $DEST ] || mkdir -p $DEST
-[ -d $DEST/$(basename "${path%.*}") ] || (cd $DEST; echo DEST=$DEST; $CMD $ENTRY)
-;;
-*)
-echo "ERROR : unknown type"; exit 1
-;;
-esac
+	case $TYPE in
+	git)
+	url.parse $ENTRY ## exports components into current shell
+	DEST=$BASE/$host/$(dirname $path)
+	CMD="git clone --recurse-submodules"
+	[ -d $DEST ] || mkdir -p $DEST
+	[ -d $DEST/$(basename "${path%.*}") ] || (cd $DEST; echo DEST=$DEST; $CMD $ENTRY)
+	;;
 
-done 
+	*)
+	echo "ERROR : unknown type"; exit 1
+	;;
+	esac #TYPE
+
+done #ENTRY
 
 echo DONE : $0 : $(date)

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+[ -z $DEBUG ] || set -x
+
+## PURPOSE: cleanup the working directory
+## - revert everything to specified commit
+## - remove anything that was never checked in
+
+REF=${1:-HEAD}
+
+echo "WARNING : clean $(pwd) ${REF} ?"
+echo "- removes all untracked files"
+echo "- including all ignored files"
+echo "- any changes to the .gitignore file will be reverted"
+echo "- all changes to tracked files will be reverted"
+echo "Control-C to cancel"
+echo "any key to continue"
+git log -1
+
+## TODO: if interactive
+read GO
+
+git reset --hard #$REF
+[ -e .gitignore ] && rm .gitignore
+git clean --force -d
+git checkout .gitignore
+

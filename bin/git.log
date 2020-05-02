@@ -1,1 +1,5 @@
-git log --decorate=full --walk-reflogs
+## REF: https://git-scm.com/docs/git-log
+
+git log -p --oneline
+
+#git log --decorate=full --walk-reflogs

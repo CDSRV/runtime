@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
-#set -x
+
+[ -z $DEBUG ] || set -x
+
 ## revert everything to previous commit
 
 REF=${1:-HEAD}
 
-echo "WARNING : reset $(pwd) ${REF} ?"
+echo "WARNING : reset $(pwd) to ${REF} ?"
+echo "Control-C to cancel"
+echo "any key to continue"
+git log -1
+
 read GO
+
 git reset --hard #$REF
-git clean --force -d
+

@@ -1,0 +1,3 @@
+[ -z $BRANCH ] && { echo "BRANCH: required"; exit 1; }
+
+git checkout -b $BRANCH

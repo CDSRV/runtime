@@ -1,2 +1,5 @@
+#!/usr/bin/env bash
+
+PATTERN=$@
 PATTERN=${PATTERN:-.}
 git add "${PATTERN}"
