@@ -1,0 +1,229 @@
+#!/usr/bin/env bash
+
+[ -z $DEBUG ] || set -o xtrace
+
+# set -o nounset 
+
+## PURPOSE: get/set security modes on devices
+## REF: https://www.pugetsystems.com/labs/articles/Introduction-to-Self-Encrypting-Drives-SED-557/
+## REF: https://floatingoctothorpe.uk/2017/ata-security.html
+## REF: https://www.admin-magazine.com/Archive/2014/19/Using-the-ATA-security-features-of-modern-hard-disks-and-SSDs
+
+[ "$EUID" = 0 ] || SUDO="sudo -EH"
+
+##
+type hdparm &>/dev/null || { echo "ERROR: hdparm is required"; exit 1; }
+type udisksctl &>/dev/null || { echo "ERROR: udisksctl is required"; exit 1; }
+type sedutil-cli &>/dev/null || { echo "ERROR: sedutil-cli is required"; exit 1; }
+
+## check libata_tpm in kernel
+
+DEVICE_TREE_PATH=${DEVICE_TREE_PATH:-/dev} ## default
+RUN_MODE=summary ## default
+
+DEVICE=${DEVICE:-$1}
+[ -z $DEVICE ] || RUN_MODE=device
+## TODO: list of excluded devices
+[[ $DEVICE == *sda* ]] && { echo "ERROR: $DEVICE is excluded"; exit 1; }
+##
+
+## just require a full device path
+# DEVICE="${DEVICE_TREE_PATH}/$DEVICE"
+
+device_info () {
+	$SUDO hdparm -I $DEVICE
+}
+
+security_state () {
+	INFO=$($SUDO hdparm -I $DEVICE)
+	echo "${INFO}" | grep password 
+	echo "${INFO}" | grep enabled
+	echo "${INFO}" | grep locked
+	echo "${INFO}" | grep frozen
+	echo "${INFO}" | grep expired
+	echo "${INFO}" | grep erase
+}
+
+#TODO: hdparm output in json
+
+case $RUN_MODE in
+	summary)
+	# tree $DEVICE_PATH/disk
+	echo "INFO: no device specified"
+	exit $? ## don't continue any ACTION	
+	;;
+
+	device)
+	# $SUDO hdparm -I $DISK
+	[ -z $DEVICE ] && { echo "ERROR: device required"; exit 1; }
+	echo "INFO: $(date) : working with $DEVICE"
+	stat $DEVICE || { echo "ERROR: can't access device"; exit 1; }
+	;;
+esac # RUN_MODE
+
+ACTION=${ACTION:-info}
+
+APPROVAL_KEYWORD="ok"
+approval () {
+	echo "WARNING: are you sure?"
+	echo "CTRL-C to cancel, $APPROVAL_KEYWORD to continue..."
+	read INPUT
+	[ "$INPUT" = "$APPROVAL_KEYWORD" ] || { echo ".. exiting"; exit 128; }
+	echo "INFO: $ACTION operation in $0 APPROVED by $LOGNAME for $DEVICE at $(date)"
+}
+
+OPTIONS="--security-prompt-for-password"
+
+USER_MODE=${USER_MODE:-u}
+[ $USER_MODE = "u" ] && DEVICE_USER=user
+[ $USER_MODE = "m" ] && DEVICE_USER=master
+
+SECURITY_MODE=${SECURITY_MODE:-h} # high
+#SECURITY_MODE=${SECURITY_MODE:-m} # maximum
+
+case $ACTION in
+	info)
+	device_info
+	echo "INFO: $(mount | grep $DEVICE)"
+	udisksctl info --block-device $DEVICE
+	df -h ${DEVICE}* | grep -v devtmpfs
+	sedutil-cli -v --query $DEVICE
+	;;
+
+	freeze)
+	## TODO: function
+	security_state	
+	echo "INFO: freezing security changes on device : $DEVICE"
+	approval
+	hdparm --verbose --sanitize-freeze-lock $DEVICE
+	security_state
+	;;
+
+	unlock)
+	echo "INFO: unlocking device for $DEVICE_USER : $DEVICE"
+	approval
+	hdparm $OPTIONS --security-${ACTION} --user-master $USER_MODE $DEVICE
+	;;
+
+	set-pass)
+	echo "INFO: setting password for $DEVICE_USER : $DEVICE"
+	approval
+	echo SECURITY_MODE=$SECURITY_MODE
+	hdparm $OPTIONS --security-mode $SECURITY_MODE --user-master $USER_MODE --security-${ACTION} $DEVICE
+	;;
+
+	disable)
+	echo "INFO: $ACTION security on device as $DEVICE_USER : $DEVICE"
+	approval
+	#echo hdparm $OPTIONS --security-${ACTION} --user-master $USER_MODE $DEVICE
+	hdparm --verbose --security-disable NULL $DEVICE	
+	;;
+
+	erase)
+	echo "INFO: $ACTION device as $DEVICE_USER : $DEVICE"
+	approval
+	echo hdparm $OPTIONS --security-${ACTION} --user-master $USER_MODE $DEVICE
+	;;
+
+	erase-enhanced)
+	echo "INFO: $ACTION device as $DEVICE_USER : $DEVICE"
+	approval
+	echo hdparm $OPTIONS --security-${ACTION} --user-master $USER_MODE $DEVICE
+	;;
+
+	eject)
+	echo "INFO: $ACTION : $DEVICE"
+	approval
+	set -x
+	for PARTITION in ${DEVICE}*
+		do
+		udisksctl unmount --block-device $PARTITION
+		done
+	udisksctl power-off --block-device ${DEVICE}*
+	;;
+
+	*)
+	echo "ERROR: unknown action '"$ACTION"' "
+	exit 255
+	;;
+
+esac # ACTION
+
+## HDPARM-9.58
+## ATA Security Feature Set
+
+#--security-help             
+## Display terse usage info for all of the \--security-* options.
+
+#--security-freeze             
+## Freeze the drive\'s security settings.
+## The drive does not accept any security commands until next power-on reset.
+## Use this function in combination with \--security-unlock to protect drive
+## from any attempt to set a new password. Can be used standalone, too.
+## No other options are permitted on the command line with this one.
+
+#--security-prompt-for-password
+## Prompt for the --security PWD rather than getting from the command line args.
+## This avoids having passwords show up in shell history or in /proc/self/cmdline during execution.
+
+
+#--security-unlock PWD 
+## Unlock the drive, using password PWD.
+## Password is given as an ASCII string and is padded with NULs to reach 32 bytes.
+## The applicable drive password is selected with the \--user-master switch
+## (default is "user" password).
+## No other options are permitted on the command line with this one.
+
+#--security-set-pass PWD 
+## Lock the drive, using password PWD (Set Password)
+## (DANGEROUS).
+## Password is given as an ASCII string and is padded with NULs to reach 32 bytes.
+## Use the special password
+## NULL
+## to set an empty password.
+## The applicable drive password is selected with the \--user-master switch
+## (default is "user" password)
+## and the applicable security mode with the \--security-mode switch.
+## No other options are permitted on the command line with this one.
+
+#--security-disable PWD 
+## Disable drive locking, using password PWD.
+## Password is given as an ASCII string and is padded with NULs to reach 32 bytes.
+## The applicable drive password is selected with the \--user-master switch
+## (default is "user" password).
+## No other options are permitted on the command line with this one.
+
+#--security-erase PWD
+## Erase (locked) drive, using password PWD
+## (DANGEROUS).
+## Password is given as an ASCII string and is padded with NULs to reach 32 bytes.
+## Use the special password
+## NULL
+## to represent an empty password.
+## The applicable drive password is selected with the \--user-master switch
+## (default is "user" password).
+## No other options are permitted on the command line with this one.
+
+#--security-erase-enhanced PWD
+## Enhanced erase (locked) drive, using password PWD
+## (DANGEROUS).
+## Password is given as an ASCII string and is padded with NULs to reach 32 bytes.
+## The applicable drive password is selected with the \--user-master switch
+## (default is "user" password).
+## No other options are permitted on the command line with this one.
+
+#--user-master USER
+## Specifies which password (user/master) to select.
+## Defaults to "user" password.
+## Only useful in combination with \--security-unlock, \--security-set-pass,
+## \--security-disable, \--security-erase or \--security-erase-enhanced.
+##        u       user password
+##        m       master password
+
+#--security-mode MODE 
+## Specifies which security mode (high/maximum) to set.
+## Defaults to high.
+## Only useful in combination with \--security-set-pass.
+##        h       high security
+##        m       maximum security
+

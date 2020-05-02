@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+[ -z $DEBUG ] || set -x
+
+## PURPOSE: info on devices
+
+[ "$EUID" = 0 ] || SUDO="sudo -EH"
+
+##
+
+DEVICE_PATH=/dev
+MODE=summary
+
+DEV=${DEV:-$1}
+[ -z $DEV ] || MODE=device
+## by-$PROPERTY
+( echo $DEV | grep by ) && DEVICE_PATH=/dev/disk
+
+DISK="${DEVICE_PATH}/$DEV"
+
+case $MODE in
+	summary)
+	tree $DEVICE_PATH/disk
+	df -h
+	;;
+
+	device)
+	lsblk \
+	--json \
+	--discard \
+	--zoned \
+	--perms \
+	--topology \
+	$DISK
+	$SUDO hdparm -I $DISK
+	;;
+esac # MODE
