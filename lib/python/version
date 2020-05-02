@@ -1,0 +1,5 @@
+## ! python2 or python3 ?
+
+import platform
+
+print(platform.python_version())

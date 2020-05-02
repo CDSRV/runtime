@@ -1,8 +1,61 @@
-#!/usr/bin/env bash
-set -x
+##
+# optional
+# [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
+
+[ "$EUID" = 0 ] || SUDO="sudo -EH" PIP_MODE="--user"
+
+## TODO: case PKG_TYPE in apk, apt, yum
+PKG_TYPE=yum
 
 ## PURPOSE: entrypoint for python setup
 
 ## REQUIREMENTS: 
-# - load OS packages v2 & v3
+# - load OS packages
 # - load pip
+# - set constants for PYENV
+
+
+## REF: https://docs.python.org/3/using/cmdline.html#environment-variables
+
+set -a
+
+## test current python environment
+
+## REF: https://packaging.python.org/tutorials/installing-packages/#requirements-for-installing-packages
+## REF: https://packaging.python.org/tutorials/installing-packages/#ensure-you-can-run-python-from-the-command-line
+## 
+## TODO: pass in specific version
+#case $PYTHON_VERSION in
+#	2)
+	python2 --version &>/dev/null || $SUDO $PKG_TYPE install -y python
+	PY2_VERSION=$(python2 --version 2>&1 | awk '{print $2}')
+	## REF: https://docs.python.org/2/library/ensurepip.html
+	python2 -m ensurepip --upgrade --default-pip $PIP_MODE
+	python2 -m pip install --upgrade $PIP_MODE pip setuptools wheel virtualenv
+	pip2 --version
+	virtualenv -h &>/dev/null && PY2_VENV=available
+#	;;
+
+#	3)
+	python3 --version &>/dev/null || $SUDO $PKG_TYPE install -y python3 python3-pip
+	PY3_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
+	pip3 --version
+	python3 -m venv -h &>/dev/null && PY3_VENV=available
+#	;;
+	
+#	4)
+	## just waiting for this mess
+#	;;
+	
+#	*)
+#	: PYTHON_VERSION=missing
+#	;;
+
+#esac #PYTHON_MAJOR
+
+set +a
+
+echo "## DONE : python setup"
+env | grep ^PY
+
+## END 
