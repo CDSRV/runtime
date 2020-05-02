@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 LENGTH=${1:-32}
 COUNT=${COUNT:-${LENGTH}}
 

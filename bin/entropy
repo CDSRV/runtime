@@ -1,2 +1,4 @@
+#!/usr/bin/env bash
+
 COUNT=${1:-245} ## for luks token
 dd if=/dev/urandom bs=1 count=$COUNT 2>/dev/null ## only output the bytes

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 LENGTH=${1:-16}
 
 apg -a 1 -M nc -n 10 -m $LENGTH 
