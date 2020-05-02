@@ -1,19 +1,12 @@
 ## PURPOSE: entrypoint for shell setup
 
+SHELL=bash
+
 ## REF: http://mywiki.wooledge.org/BashFAQ/028
 ## REF: https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
-
-LS=/usr/bin/ls  ## ls is aliased in default shell env
+## REF: https://stackoverflow.com/questions/3327013/how-to-determine-the-current-shell-im-working-on
 
 set +o xtrace
-
-## TODO: case SHELL
-## REF: https://stackoverflow.com/questions/3327013/how-to-determine-the-current-shell-im-working-on
-unset SHELL
-
-SHELL=$0
-
-[[ "$SHELL" = "bash" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
 
 unset CDPATH
 
@@ -23,9 +16,9 @@ unset CDPATH
 # exit if executed directly
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
 
-[[ "${BASH_SOURCE[0]}" != "${0}" ]] && echo "INFO: script ${BASH_SOURCE[0]} is being sourced ..."
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] && echo "INFO: loading ${BASH_SOURCE[0]}"
 
-## REF: ## REF: https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
+## REF: https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
 SOURCE="${BASH_SOURCE[0]}"
 
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
@@ -45,39 +38,39 @@ set -o pipefail
 echo "INFO: setting WORKSPACE and PATH"
 export WORKSPACE=${WORKSPACE:-"$( cd "$DIR/../../" && pwd )"}
 
+echo "WORKSPACE=$WORKSPACE"
+
 ( echo $PATH | grep $WORKSPACE &>/dev/null ) || export PATH=$WORKSPACE/bin:$PATH
 
-echo "INFO: importing functions"
-LIBS="$WORKSPACE/lib/"$(basename $SHELL)"/function/"
-for lib in $($LS $LIBS)
+echo "INFO: loading ..."
+## TODO: as a function
+
+[ -z $DEBUG ] || set -o xtrace
+
+: FUNCTION
+LIBS="${WORKSPACE}/lib/${SHELL}/function"
+for lib in $LIBS/*
 do
-. $LIBS/$lib
+. $lib
 done
  
-echo "INFO: importing aliases"
-LIBS="$WORKSPACE/lib/"$(basename $SHELL)"/alias/"
-for lib in $($LS $LIBS)
+: ALIAS
+LIBS="${WORKSPACE}/lib/${SHELL}/alias"
+for lib in $LIBS/*
 do
-. $LIBS/$lib
+. $lib
 done
+
+: ENVIRONMENT
+LIBS="${WORKSPACE}/lib/${SHELL}/environment"
+for lib in $LIBS/*
+do
+. $lib
+done
+
 
 ## TODO: import keymaps
 ## TODO: import completions
 
-## info
-# check_interactive
-# if DEBUG set
-# list_functions
-# declare -A -p BASH_ALIASES
-# alias
-#: ULIMIT="
-#$(ulimit -a) 
-#: "
-#"
-#: UMASK=$(umask)
-
-## test
-require_interactive && echo "OK"
-
-## populate environment
-# determine OS distribution
+set +o xtrace
+echo "## DONE: setup $SHELL : $(uname -a)"

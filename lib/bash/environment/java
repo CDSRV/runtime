@@ -1,0 +1,6 @@
+## 
+type java || JAVA_VERSION=missing return
+env | grep JAVA
+: JAVA_HOME=$JAVA_HOME
+: CLASSPATH=$CLASSPATH
+
