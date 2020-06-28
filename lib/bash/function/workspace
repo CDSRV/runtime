@@ -1,0 +1,45 @@
+workspace () {
+
+## PURPOSE: load and activate a workspace directory
+
+[ -z $WORKSPACE_DEBUG ] || set -o xtrace
+
+SHELL=bash
+
+WORKSPACE="${1:-$(pwd)}"
+( echo $PATH | grep "${WORKSPACE}" &>/dev/null ) || export PATH=$WORKSPACE/bin:$PATH
+
+
+: FUNCTION
+LIBS="${WORKSPACE}/lib/${SHELL}/function"
+if [ -a ${LIBS} ]
+then
+for lib in $LIBS/*
+do
+. $lib
+done
+fi
+
+: ALIAS
+LIBS="${WORKSPACE}/lib/${SHELL}/alias"
+if [ -a ${LIBS} ]
+then
+for lib in $LIBS/*
+do
+. $lib
+done
+fi
+
+: ENVIRONMENT
+LIBS="${WORKSPACE}/lib/${SHELL}/environment"
+if [ -a ${LIBS} ]
+then
+for lib in $LIBS/*
+do
+. $lib
+done
+fi
+
+##
+[ -z $WORKSPACE_DEBUG ] || set +o xtrace
+}
