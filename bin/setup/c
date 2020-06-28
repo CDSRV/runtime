@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+##
+## PURPOSE: entrypoint for C compiler setup
+## REQUIREMENTS: 
+# - load OS packages
+# - set constants
+
+# optional
+# [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
+
+[ "$EUID" = 0 ] || SUDO="sudo -EH"
+
+## TODO: case PKG_TYPE in apk, apt, yum
+PKG_TYPE=yum
+## TODO: for PKG in PKG_LIST
+## - define pkg, binary & version test function
+
+## REF: 
+
+set -a
+
+gcc --version &>/dev/null || $SUDO $PKG_TYPE install -y gcc
+GCC_VERSION="$(gcc --version | head -1 | awk '{print $3}')"
+
+
+## package name is not the executable name
+
+gccgo --version &>/dev/null || $SUDO $PKG_TYPE install -y gcc-go
+GCCGO_VERSION="$(gccgo --version | head -1 | awk '{print $3}')"
+
+## each package has slightly different version conventions
+
+gdb --version &>/dev/null || $SUDO $PKG_TYPE install -y gdb gcc-gdb-plugin
+GDB_VERSION="$(gdb --version | head -1 | awk '{print $8}')"
+	
+set +a
+
+echo "## AVAILABLE :"
+
+[ "$PKG_TYPE" = "yum" ] && ( rpm -qa | grep gcc )
+[ "$PKG_TYPE" = "yum" ] && ( rpm -qa | grep '^gdb-' )
+
+echo "## DONE : C setup"
+
+env | grep ^GCC
+env | grep ^GDB
+
+## END 

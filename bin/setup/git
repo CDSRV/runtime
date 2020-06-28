@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ##
 ## REF: https://git-scm.com/docs/git-config
 
@@ -8,9 +10,11 @@
 
 [ "$EUID" = 0 ] && SCOPE="system"
 
+## TODO: detect package type
 PKG_TYPE=yum
-
-git --version &>/dev/null || $SUDO $PKG_TYPE install -y git git-doc git-subtree
+INSTALL="install -y"
+## TODO: use < ${PKG_TYPE}-package.list
+$SUDO $PKG_TYPE $INSTALL git git-doc git-subtree
 git config --list
 
 set -a

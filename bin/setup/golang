@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+## PURPOSE: entrypoint for golang setup
+
+## REF: https://golang.org/doc/install/gccgo
+## REF: https://golang.org/doc/install/source
+
+set -x
+
+# gcc-go

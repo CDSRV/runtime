@@ -16,7 +16,7 @@ unset CDPATH
 # exit if executed directly
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
 
-[[ "${BASH_SOURCE[0]}" != "${0}" ]] && echo "INFO: loading ${BASH_SOURCE[0]}"
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] && echo "# ... loading ${BASH_SOURCE[0]}"
 
 ## REF: https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
 SOURCE="${BASH_SOURCE[0]}"
@@ -30,44 +30,52 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 #
 
-echo "INFO: setting shell options"
+echo "# ... setting shell options"
 # set -o allexport
 # set -o xtrace
 set -o pipefail
 
-echo "INFO: setting WORKSPACE and PATH"
-export WORKSPACE=${WORKSPACE:-"$( cd "$DIR/../../" && pwd )"}
+export RUNTIME=${RUNTIME:-"$( cd "$DIR/../../" && pwd )"}
 
-echo "WORKSPACE=$WORKSPACE"
+echo "RUNTIME=$RUNTIME"
 
-( echo $PATH | grep $WORKSPACE &>/dev/null ) || export PATH=$WORKSPACE/bin:$PATH
+( echo $PATH | grep $RUNTIME &>/dev/null ) || export PATH=$RUNTIME/bin:$PATH
 
-echo "INFO: loading ..."
-## TODO: as a function
+echo "# ... loading"
 
 [ -z $DEBUG ] || set -o xtrace
 
+export WORKSPACE=${RUNTIME}
+
 : FUNCTION
 LIBS="${WORKSPACE}/lib/${SHELL}/function"
+if [ -a ${LIBS} ]
+then
 for lib in $LIBS/*
 do
 . $lib
 done
- 
+fi
+
 : ALIAS
 LIBS="${WORKSPACE}/lib/${SHELL}/alias"
+if [ -a ${LIBS} ]
+then
 for lib in $LIBS/*
 do
 . $lib
 done
+fi
 
 : ENVIRONMENT
 LIBS="${WORKSPACE}/lib/${SHELL}/environment"
+if [ -a ${LIBS} ]
+then
 for lib in $LIBS/*
 do
 . $lib
 done
-
+fi
 
 ## TODO: import keymaps
 ## TODO: import completions
