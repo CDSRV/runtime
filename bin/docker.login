@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -x
+set -a
 
 NAME=${1:-$(basename ${PWD})} ## MODEL:
 

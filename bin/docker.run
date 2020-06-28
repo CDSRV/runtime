@@ -3,7 +3,7 @@ set -x
 
 : ... starting container 
 
-NAME=${1:-$(basename ${PWD})} ## MODEL:
+NAME=${NAME:-$(basename ${PWD})} ## MODEL:
 
 IMAGE=${IMAGE:-centos:latest}
 
