@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+## PURPOSE: delete a branch
+
+BRANCH="${BRANCH:-$1}"
+BRANCH="${BRANCH:?required}"
+
+[ "${BRANCH}" = "$(git symbolic-ref --short HEAD)" ] && { echo "ERROR: not deleting current branch"; exit 1; }
+
+git branch --delete "${BRANCH}"
+
+## TODO: implement FORCE flag

@@ -1,2 +1,4 @@
+#!/usr/bin/env bash
+
 VCS=${VCS:-git}
-$VCS.log
+$VCS.log $@

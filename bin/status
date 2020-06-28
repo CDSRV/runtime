@@ -2,6 +2,7 @@
 
 set -o xtrace
 ## current environment
+RUNTIME=$RUNTIME
 WORKSPACE=$WORKSPACE
 
 ## current path repository

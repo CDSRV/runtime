@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+## PURPOSE: create a bare/empty branch
+
+## REF: https://stackoverflow.com/questions/34100048/github-create-empty-branch
+
+BRANCH="${BRANCH:-$1}"
+BRANCH="${BRANCH:?required}"
+
+
+## NOTE: checkout branch, create one if none exist, exit if already exists
+#git checkout --orphan $BRANCH
+#git rm -rf .
+#git clean -fd
+#git commit --allow-empty -m "${BRANCH}.init"
+
+## REF: https://stackoverflow.com/questions/645450/insert-a-commit-before-the-root-commit-in-git
+tree=$(git hash-object -wt tree --stdin < /dev/null)
+commit=$(git commit-tree -m "${BRANCH}.init" $tree)
+## TODO: check if branch exists
+git branch "${BRANCH}" $commit
+## TODO: check if on current branch already
+git checkout "${BRANCH}"
+
+

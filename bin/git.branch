@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+## PURPOSE: switch between branches
+## REF: https://en.wikipedia.org/wiki/Branch_(computer_science)
+## REF: https://www.techiedelight.com/determine-current-branch-name-git/
+## REF: https://gist.github.com/intel352/9761288
+## REF: https://stackoverflow.com/questions/1417957/show-just-the-current-branch-in-git/1418022
+## REF: https://git-scm.com/docs/git-branch
+
+BRANCH="${BRANCH:-$1}"
+
+## NOTE: return current branch name if no branch is defined
+
+[ -z $BRANCH ] && { git symbolic-ref --short HEAD; exit $?; }
+
+## NOTE: checkout branch, create one if needed
+
+## TODO: determine git version & feature set
+## REF: https://www.infoq.com/news/2019/08/git-2-23-switch-restore/
+
+## TODO: tracking options
+## REF: https://stackoverflow.com/questions/5167957/is-there-a-better-way-to-find-out-if-a-local-git-branch-exists
+git show-ref refs/heads/"${BRANCH}" &>/dev/null || git checkout -b $BRANCH
+
+## REF: https://devconnected.com/how-to-switch-branch-on-git/
+[ "${BRANCH}" = "$(git symbolic-ref --short HEAD)" ] || git checkout "${BRANCH}"
+

@@ -2,4 +2,4 @@
 
 PATTERN=$@
 PATTERN=${PATTERN:-.}
-git add "${PATTERN}"
+git add $PATTERN

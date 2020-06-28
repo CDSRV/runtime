@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ## REF: https://git-scm.com/docs/git-log
 
 git log -p --oneline

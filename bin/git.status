@@ -1,6 +1,8 @@
-## ref: https://git-scm.com/docs/git-status
+#!/usr/bin/env bash
 
-MODE="--porcelain=v2" ## non-interactive
+## REF: https://git-scm.com/docs/git-status
 
-[ -z $INTERACTIVE ] && unset MODE
-git status -vsb $MODE --ignored=matching
+GIT_MODE="--porcelain=v2" ## non-interactive
+
+[ -z $INTERACTIVE ] && unset GIT_MODE
+git status -vsb $GIT_MODE --ignored=matching
