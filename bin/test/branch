@@ -1,0 +1,7 @@
+DEFAULT=$(branch)
+branch test-branch
+branch "${DEFAULT}"
+branch.delete test-branch
+branch.empty empty-branch
+branch "${DEFAULT}"
+
