@@ -6,9 +6,14 @@
 ## - revert everything to specified commit
 ## - remove anything that was never checked in
 
-REF=${1:-HEAD}
+## REF: https://git-scm.com/docs/git-reset
 
-echo "WARNING : clean $(pwd) ${REF} ?"
+## TODO: input validation
+#REV=${1:-HEAD}
+REV=HEAD
+
+
+echo "WARNING : clean $(pwd) ${REV} ?"
 echo "- removes all untracked files"
 echo "- including all ignored files"
 echo "- any changes to the .gitignore file will be reverted"
@@ -18,9 +23,9 @@ echo "any key to continue"
 git log -1
 
 ## TODO: if interactive
-read GO
+read REPLY
 
-git reset --hard #$REF
+git reset --hard $REV
 [ -e .gitignore ] && rm .gitignore
 git clean --force -d
 git checkout .gitignore

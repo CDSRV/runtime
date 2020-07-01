@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+[ -z $DEBUG ] || set -x
+
+## revert everything to previous commit
+## REF: https://git-scm.com/docs/git-reset
+
+## TODO: input validation
+#REV=${1:-HEAD}
+REV=HEAD
+
+echo "WARNING : reset $(pwd) to ${REV} ?"
+echo "Control-C to cancel"
+echo "any key to continue"
+git log -1
+
+read REPLY 
+
+git reset --hard $REV
+

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+## NOTE: /usr/bin/reset is used to clear the terminal, use of this command may override that function
+VCS=${VCS:-git}
+$VCS.reset $@
