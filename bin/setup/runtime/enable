@@ -1,0 +1,5 @@
+## enable runtime toolkit function in .bash_profile
+## envsubst
+runtime.enable () {
+. ${PWD}/bin/setup/bash
+}
