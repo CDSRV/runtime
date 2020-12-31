@@ -11,4 +11,9 @@ set -xe
 echo $(pwd)
 
 cp ~/.bashrc ~/.bashrc-backup
-grep runtime.enable ~/.bashrc || ( envsubst < ./bin/setup/runtime/enable >> ~/.bashrc )
+grep runtime.enable ~/.bashrc && { : NOOP : function already present; exit 0; }
+
+
+envsubst < ./bin/setup/runtime/enable >> ~/.bashrc
+
+: NOTICE : start a new shell for runtime.enable function to be loaded
