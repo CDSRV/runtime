@@ -1,0 +1,5 @@
+## REF=http://bashrcgenerator.com/
+## REF=https://scriptim.github.io/bash-prompt-generator/
+
+# [@Hostname (short)/*/Working Directory (Basename):Exit Status]Prompt Sign Space
+PS1='\[\e[0m\][\[\e[0m\]@\[\e[0m\]\h\[\e[0m\]/\[\e[0m\]*\[\e[0m\]/\[\e[0m\]\W\[\e[0m\]:\[\e[0m\]$?\[\e[0m\]]\[\e[0m\]\$\[\e[m\] \[\e0'
