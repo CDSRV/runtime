@@ -18,7 +18,7 @@ do
 	echo "##<< RUNNING: '"${1}"' :: DELAY=$DELAY COUNT=$COUNT"
 	echo "##<< START: $START"
 	COUNT=$((COUNT+1))
-	${1}
+	eval "${1}"
 	echo "##<< WAIT: $(date)"
 	sleep $DELAY
 done
