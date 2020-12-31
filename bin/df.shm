@@ -1,0 +1,2 @@
+df -hT /dev/shm | tail -n +2 | awk '{print $5}'
+
