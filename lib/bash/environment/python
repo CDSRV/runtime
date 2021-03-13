@@ -1,0 +1,8 @@
+# REF=https://docs.python.org/3/using/cmdline.html#environment-variables
+set -a
+PYTHONWARNINGS=default
+#PYTHONPLATLIBDIR=${PYTHONPLATLIBDIR:-undefined} # https://docs.python.org/3/library/sys.html#sys.platlibdir
+#PYTHONSTARTUP
+#PYTHONPYCACHEPREFIX=
+#PYTHONDEVMODE
+set +a
