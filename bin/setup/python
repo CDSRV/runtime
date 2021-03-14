@@ -16,6 +16,14 @@
 PKG_TYPE=${PKG_TYPE:?required}
 [ "$PKG_TYPE" = "apt" ] && $SUDO apt-get update
 
+case $PKG_TYPE in
+	apt)
+	PYTHON_PKG_LIST="python-dev python-setuptools"
+	;;
+	yum)
+	PYTHON_PKG_LIST="python-develop python-setuptools"
+	;;
+esac #PKG_TYPE
 
 PYTHON_MAJOR_VERSION=$1
 
@@ -37,20 +45,24 @@ set -a
 set -x
 case $PYTHON_MAJOR_VERSION in
 	2)
-	python2 --version &>/dev/null || $SUDO $PKG_TYPE install -y python python-dev python-setuptools
-	python2 --version &>/dev/null && $SUDO $PKG_TYPE install -y python-dev python-setuptools
+	python2 --version &>/dev/null || $SUDO $PKG_TYPE install -y python
+	type python2 || : ERROR
+	python2 --version &>/dev/null && $SUDO $PKG_TYPE install -y $PYTHON_PKG_LIST
 	PY2_VERSION=$(python2 --version 2>&1 | awk '{print $2}')
 	pip2 --version || ( ( [ "$PKG_TYPE" = "apt" ] && $SUDO apt-get install -y curl ) && curl -ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2 )
+	PATH=$HOME/.local/bin:$PATH
+	type pip2 || : ERROR
 	python2 -m pip install --upgrade $PIP_MODE pip setuptools wheel virtualenv
 	pip2 --version
 	virtualenv -h &>/dev/null && PY2_VENV=available
-	PATH=$HOME/.local/bin:$PATH
 	;;
 
 	3)
 	python3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y python3
+	type python3 || : ERROR
 	PY3_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
 	pip3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y python3-pip
+	type pip3 || : ERROR
 	pip3 --version
 	python3 -m venv -h &>/dev/null && PY3_VENV=available
 	;;
