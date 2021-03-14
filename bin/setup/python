@@ -12,6 +12,7 @@
 [ -z PKG_TYPE ] || . ./bin/setup/bash
 
 PKG_TYPE=${PKG_TYPE:?required}
+[ "$PKG_TYPE" = "apt" ] && apt-get update
 
 set -a
 
@@ -33,17 +34,18 @@ PYTHON_MAJOR_VERSION=${PYTHON_MAJOR_VERSION:-3}
 
 case $PYTHON_MAJOR_VERSION in
 	2)
-	python2 --version &>/dev/null || ( [ "$PKG_TYPE" = "apt" ] && apt-get update; $SUDO $PKG_TYPE install -y python )
+	python2 --version &>/dev/null || $SUDO $PKG_TYPE install -y python
 	PY2_VERSION=$(python2 --version 2>&1 | awk '{print $2}')
-	pip --version || ( ( [ "$PKG_TYPE" = "apt" ] && apt-get install -y curl ) && curl -ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | python )
+	pip2 --version || ( ( [ "$PKG_TYPE" = "apt" ] && apt-get install -y curl ) && curl -ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2 )
 	python2 -m pip install --upgrade $PIP_MODE pip setuptools wheel virtualenv
 	pip2 --version
 	virtualenv -h &>/dev/null && PY2_VENV=available
 	;;
 
 	3)
-	python3 --version &>/dev/null ||  ( [ "$PKG_TYPE" = "apt" ] && apt-get update; $SUDO $PKG_TYPE install -y python3 python3-pip )
+	python3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y python3
 	PY3_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
+	pip3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y python3-pip
 	pip3 --version
 	python3 -m venv -h &>/dev/null && PY3_VENV=available
 	;;
