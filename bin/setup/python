@@ -16,20 +16,28 @@
 PKG_TYPE=${PKG_TYPE:?required}
 [ "$PKG_TYPE" = "apt" ] && $SUDO apt-get update
 
+GET_PIP_URL=${GET_PIP_URL:-https://bootstrap.pypa.io/pip/2.7/get-pip.py}
+
+set -a
+
 case $PKG_TYPE in
 	apt)
-	PYTHON_PKG_LIST="python-dev python-setuptools"
+	PY2_PKG="python"
+	PY2_PKG_LIST="python-dev python-setuptools"
+	PY3_PKG="python3"
+	PY3_PKG_LIST="python3-pip"
 	;;
 	yum)
-	PYTHON_PKG_LIST="python-develop python-setuptools"
+	PY2_PKG="python2"
+	PY2_PKG_LIST="python2-devel"
+	PY3_PKG="python3"
+	PY3_PKG_LIST="python3-pip"
 	;;
 esac #PKG_TYPE
 
 PYTHON_MAJOR_VERSION=$1
 
 PYTHON_MAJOR_VERSION=${PYTHON_MAJOR_VERSION:-3}
-
-set -a
 
 ## REQUIREMENTS: 
 # - load OS packages
@@ -45,11 +53,11 @@ set -a
 set -x
 case $PYTHON_MAJOR_VERSION in
 	2)
-	python2 --version &>/dev/null || $SUDO $PKG_TYPE install -y python
+	python2 --version &>/dev/null || $SUDO $PKG_TYPE install -y $PY2_PKG
 	type python2 || : ERROR
-	python2 --version &>/dev/null && $SUDO $PKG_TYPE install -y $PYTHON_PKG_LIST
+	python2 --version &>/dev/null && $SUDO $PKG_TYPE install -y $PY2_PKG_LIST
 	PY2_VERSION=$(python2 --version 2>&1 | awk '{print $2}')
-	pip2 --version || ( ( [ "$PKG_TYPE" = "apt" ] && $SUDO apt-get install -y curl ) && curl -ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2 )
+	pip2 --version || (( type curl || $SUDO $PKG_TYPE install -y curl ) && curl -ls "${GET_PIP_URL}" | python2 )
 	PATH=$HOME/.local/bin:$PATH
 	type pip2 || : ERROR
 	python2 -m pip install --upgrade $PIP_MODE pip setuptools wheel virtualenv
@@ -58,10 +66,10 @@ case $PYTHON_MAJOR_VERSION in
 	;;
 
 	3)
-	python3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y python3
+	python3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y $PY3_PKG
 	type python3 || : ERROR
 	PY3_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
-	pip3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y python3-pip
+	pip3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y $PY3_PKG_LIST
 	type pip3 || : ERROR
 	pip3 --version
 	python3 -m venv -h &>/dev/null && PY3_VENV=available
@@ -84,7 +92,13 @@ esac #PYTHON_MAJOR_VERSION
 set +x
 set +a
 
+unset PYTHON_MAJOR_VERSION
+unset PY2_PKG
+unset PY2_PKG_LIST
+unset PY3_PKG
+unset PY3_PKG_LIST
+
 echo "## DONE : python setup"
-env | grep ^PY
+env | grep ^PY | sort
 
 ## END 
