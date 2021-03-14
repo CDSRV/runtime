@@ -11,7 +11,7 @@
 
 [ "$EUID" = 0 ] || SUDO="sudo -EH" PIP_MODE="--user"
 
-[ -z PKG_TYPE ] && . ./bin/setup/bash
+[ -z $PKG_TYPE ] && . ./bin/setup/bash
 
 PKG_TYPE=${PKG_TYPE:?required}
 [ "$PKG_TYPE" = "apt" ] && $SUDO apt-get update
