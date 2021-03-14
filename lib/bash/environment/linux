@@ -1,0 +1,4 @@
+## determine linux environment / distro
+yum --version && export PKG_TYPE=yum
+apt --version && export PKG_TYPE=apt
+apk --version && export PKG_TYPE=apk
