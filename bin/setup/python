@@ -2,6 +2,8 @@
 
 ## PURPOSE: entrypoint for python setup
 
+[ "$(basename $SHELL)" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
+
 # exit if executed directly
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
 
@@ -12,14 +14,14 @@
 [ -z PKG_TYPE ] || . ./bin/setup/bash
 
 PKG_TYPE=${PKG_TYPE:?required}
-[ "$PKG_TYPE" = "apt" ] && apt-get update
+[ "$PKG_TYPE" = "apt" ] && $SUDO apt-get update
 
-set -a
 
 PYTHON_MAJOR_VERSION=$1
 
 PYTHON_MAJOR_VERSION=${PYTHON_MAJOR_VERSION:-3}
 
+set -a
 
 ## REQUIREMENTS: 
 # - load OS packages
@@ -56,12 +58,10 @@ case $PYTHON_MAJOR_VERSION in
 	: REF: https://www.reddit.com/r/Python/comments/7zvyhx/pep_563_mentions_python_40_whats_going_on/
 	: REF: https://twitter.com/gvanrossum/status/1306082472443084801
 	"
-	unset PYTHON_MAJOR_VERSION
 	;;
 	
 	*)
 	echo "ERROR: not implemented"
-	unset PYTHON_MAJOR_VERSION
 	;;
 
 esac #PYTHON_MAJOR_VERSION

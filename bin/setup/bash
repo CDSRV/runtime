@@ -1,6 +1,8 @@
+#!/usr/bin/env bash
+
 ## PURPOSE: entrypoint for shell setup
 
-SHELL=bash
+[ "$(basename $SHELL)" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
 
 ## REF: http://mywiki.wooledge.org/BashFAQ/028
 ## REF: https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
@@ -11,7 +13,7 @@ set +o xtrace
 unset CDPATH
 
 ## REF: https://stackoverflow.com/questions/2683279/how-to-detect-if-a-script-is-being-sourced
-[[ ${BASH_VERSINFO[0]} -le 2 ]] && echo 'ERROR: No BASH_SOURCE array variable' && exit 1
+[[ ${BASH_VERSINFO[0]} -le 2 ]] && { echo 'ERROR: bash version too low'; exit 1; }
 
 # exit if executed directly
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
@@ -48,7 +50,7 @@ echo "# ... loading"
 export WORKSPACE=${RUNTIME}
 
 : FUNCTION
-LIBS="${WORKSPACE}/lib/${SHELL}/function"
+LIBS="${WORKSPACE}/lib/bash/function"
 if [ -a ${LIBS} ]
 then
 for lib in $LIBS/*
@@ -58,7 +60,7 @@ done
 fi
 
 : ALIAS
-LIBS="${WORKSPACE}/lib/${SHELL}/alias"
+LIBS="${WORKSPACE}/lib/bash/alias"
 if [ -a ${LIBS} ]
 then
 for lib in $LIBS/*
@@ -68,7 +70,7 @@ done
 fi
 
 : ENVIRONMENT
-LIBS="${WORKSPACE}/lib/${SHELL}/environment"
+LIBS="${WORKSPACE}/lib/bash/environment"
 if [ -a ${LIBS} ]
 then
 for lib in $LIBS/*
@@ -81,4 +83,4 @@ fi
 ## TODO: import completions
 
 set +o xtrace
-echo "## DONE: setup $SHELL : $(uname -a)"
+echo "## DONE: setup bash : $(uname -a)"
