@@ -34,6 +34,7 @@ set -a
 ## REF: https://packaging.python.org/tutorials/installing-packages/#ensure-you-can-run-python-from-the-command-line
 ## 
 
+set -x
 case $PYTHON_MAJOR_VERSION in
 	2)
 	python2 --version &>/dev/null || $SUDO $PKG_TYPE install -y python
@@ -66,6 +67,7 @@ case $PYTHON_MAJOR_VERSION in
 
 esac #PYTHON_MAJOR_VERSION
 
+set +x
 set +a
 
 echo "## DONE : python setup"
