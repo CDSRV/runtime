@@ -38,6 +38,7 @@ set -x
 case $PYTHON_MAJOR_VERSION in
 	2)
 	python2 --version &>/dev/null || $SUDO $PKG_TYPE install -y python python-dev python-setuptools
+	python2 --version &>/dev/null && $SUDO $PKG_TYPE install -y python-dev python-setuptools
 	PY2_VERSION=$(python2 --version 2>&1 | awk '{print $2}')
 	pip2 --version || ( ( [ "$PKG_TYPE" = "apt" ] && $SUDO apt-get install -y curl ) && curl -ls https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2 )
 	python2 -m pip install --upgrade $PIP_MODE pip setuptools wheel virtualenv
