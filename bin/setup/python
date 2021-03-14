@@ -2,7 +2,7 @@
 
 ## PURPOSE: entrypoint for python setup
 
-[ "$(basename $SHELL)" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
+[ "$(basename $(readlink /proc/$$/exe))" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
 
 # exit if executed directly
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
@@ -11,7 +11,7 @@
 
 [ "$EUID" = 0 ] || SUDO="sudo -EH" PIP_MODE="--user"
 
-[ -z PKG_TYPE ] || . ./bin/setup/bash
+[ -z PKG_TYPE ] && . ./bin/setup/bash
 
 PKG_TYPE=${PKG_TYPE:?required}
 [ "$PKG_TYPE" = "apt" ] && $SUDO apt-get update

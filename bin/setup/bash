@@ -2,7 +2,7 @@
 
 ## PURPOSE: entrypoint for shell setup
 
-[ "$(basename $SHELL)" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
+[ "$(basename $(readlink /proc/$$/exe))" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
 
 ## REF: http://mywiki.wooledge.org/BashFAQ/028
 ## REF: https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
