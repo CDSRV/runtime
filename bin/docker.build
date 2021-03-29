@@ -4,44 +4,13 @@
 
 set -o allexport # required for envsubst
 
-## TODO: check for dockerd in compatible state
-## https://docs.docker.com/engine/reference/builder/
-
-## https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
-
-# DOCKER_BUILDKIT=1 # check for dockerd in experimental mode
-## TEMPLATE_HEADER="# syntax=docker/dockerfile:experimental"
-
-
-## metadata 
-NAME=${1:-$(basename ${PWD})} ## MODEL:
-IMAGE=${IMAGE:-centos:latest}
-
-[[ $ROOT = "/" ]] && ROOT=/tmp # prevent bind mounting / > / 
-
-ROOT=${ROOT:-/root}
-BASENAME=$(basename ${PWD})
-WORKDIR=$ROOT/$BASENAME
-
-LABEL=$NAME
-VOLUME=$WORKDIR
-
-# 
+. $WORKSPACE/etc/docker/build.properties
 
 : ... building
 
-## render template
-
-## create output file as artifact
-TEMPLATE=Dockerfile.template
-OUTPUT=Dockerfile
 envsubst < $TEMPLATE > $OUTPUT
-## or pipe rendered template to docker service
-docker image build -t $LABEL .
 
-#IMAGE=$(docker images --format "{{.Names}}")
-## TODO: get resultant image
+docker image build -f $OUTPUT -t $LABEL $WORKSPACE
 
-## test container + report status
 
 

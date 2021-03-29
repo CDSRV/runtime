@@ -2,10 +2,11 @@
 set -x
 set -a
 
-NAME=${1:-$(basename ${PWD})} ## MODEL:
+. $WORKSPACE/etc/docker/login.properties
 
 CONTAINER=$(docker ps -a --filter name=$NAME --format "{{.Names}}") ## INSTANCE:
 
 [ $CONTAINER = $NAME ] && ( docker start $NAME; docker attach $NAME )
 
 [ -z $CONTAINER ] && docker.run
+docker ps -s -a --filter name=$NAME

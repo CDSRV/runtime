@@ -1,28 +1,19 @@
 #!/usr/bin/env bash
 set -x
 
+## PURPOSE: generic wrapper for "docker run"
+## REF: https://docs.docker.com/engine/reference/run/
+
+. $WORKSPACE/etc/docker/run.properties
+
+ARG=${ARG:-$1}
+
 : ... starting container 
 
-NAME=${NAME:-$(basename ${PWD})} ## MODEL:
+docker run $OPTIONS $IMAGE $COMMAND $ARG
 
-IMAGE=${IMAGE:-centos:latest}
-
-# bind one workdir
-[[ $ROOT = "/" ]] && ROOT=/tmp # prevent bind mounting / > / 
-ROOT=${ROOT:-/root}
-BASENAME=$(basename ${PWD})
-WORKDIR=$ROOT/$BASENAME
-
-# secure default
-WORKDIR_MODE=${WORKDIR_MODE:-"ro"}
-MOUNT_OPTIONS=",${WORKDIR_MODE}"
-
-## TODO: use a named volume
-[[ $WORKDIR_MODE = "rw" ]] && unset MOUNT_OPTIONS ## rw option undefined
-MOUNT="type=bind,src="${PWD}",dst=${WORKDIR}${MOUNT_OPTIONS}"
-
-docker run \
---name $NAME \
--w $WORKDIR \
---mount "${MOUNT}" \
--it $IMAGE /bin/bash
+#docker run \
+#--name $NAME \
+#-w $WORKDIR \
+#--mount "${MOUNT}" \
+#$TTY_MODE $IMAGE $RUN_CMD

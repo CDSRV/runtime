@@ -1,0 +1,23 @@
+### syntax=docker/dockerfile:experimental 
+## TODO: check dockerd is in correct state
+
+## TODO: setup/shell inside container itself - modify \$HOME/.bash_profile
+#..+ strip docker. commands
+
+# ARG
+
+## "namespace:tag"
+FROM "${IMAGE}" 
+
+## LABELS:
+LABEL name="${NAME}"
+
+VOLUME "${VOLUME}"
+
+WORKDIR "${WORKDIR}"
+
+# EXPOSE "${PORT}"/"${PROTOCOL}"
+
+# CMD "${CMD}"
+
+# ENTRYPOINT "${ENTRYPOINT}"
