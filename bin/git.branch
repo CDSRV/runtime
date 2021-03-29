@@ -7,9 +7,13 @@
 ## REF: https://stackoverflow.com/questions/1417957/show-just-the-current-branch-in-git/1418022
 ## REF: https://git-scm.com/docs/git-branch
 
-BRANCH="${BRANCH:-$1}"
+## NOTE: ignore BRANCH environment variable
+[ -z $BRANCH ] || unset $BRANCH
 
-## NOTE: return current branch name if no branch is defined
+## NOTE: supply branch name to create or switch to
+BRANCH="$1"
+
+## NOTE: return current branch name if no branch is supplied
 
 [ -z $BRANCH ] && { git symbolic-ref --short HEAD; exit $?; }
 

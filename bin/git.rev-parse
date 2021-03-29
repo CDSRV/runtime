@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 
-git rev-parse $@
+REV=$@
+REV=${REV:-HEAD}
+
+git rev-parse $REV
