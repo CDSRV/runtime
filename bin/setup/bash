@@ -33,7 +33,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 #
 
 echo "# ... setting shell options"
-# set -o allexport
+set -o allexport  ## TODO: enumerate vars
 # set -o xtrace
 set -o pipefail
 
@@ -49,38 +49,17 @@ echo "# ... loading"
 
 export WORKSPACE=${RUNTIME}
 
-: FUNCTION
-LIBS="${WORKSPACE}/lib/bash/function"
-if [ -a ${LIBS} ]
-then
-for lib in $LIBS/*
-do
-. $lib
-done
-fi
+## NOTE: load & call workspace runtime function
 
-: ALIAS
-LIBS="${WORKSPACE}/lib/bash/alias"
-if [ -a ${LIBS} ]
-then
-for lib in $LIBS/*
-do
-. $lib
-done
-fi
+. ${WORKSPACE}/lib/bash/function/workspace
 
-: ENVIRONMENT
-LIBS="${WORKSPACE}/lib/bash/environment"
-if [ -a ${LIBS} ]
-then
-for lib in $LIBS/*
-do
-. $lib
-done
-fi
+cd $WORKSPACE
+workspace
+status
 
 ## TODO: import keymaps
 ## TODO: import completions
 
 set +o xtrace
+set +o allexport
 echo "## DONE: setup bash : $(uname -a)"

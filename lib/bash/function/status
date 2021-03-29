@@ -1,0 +1,17 @@
+workspace.status () {
+echo "
+PATH=$PATH
+RUNTIME=$RUNTIME
+WORKSPACE=$WORKSPACE
+PROJECT=$PROJECT
+BRANCH=$(branch)
+REV=$(rev)
+VERSION=$(version)
+NAME=$NAME
+PWD=$(pwd)
+$(env | grep ^PY)
+$(env | grep ^GO)"
+## current path repository
+echo VCS=$VCS
+${VCS}.status
+}

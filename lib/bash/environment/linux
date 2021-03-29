@@ -2,3 +2,6 @@
 yum --version && export PKG_TYPE=yum
 apt --version && export PKG_TYPE=apt
 apk --version && export PKG_TYPE=apk
+
+OS="$(uname -s)"
+ARCH="$(uname -m)"

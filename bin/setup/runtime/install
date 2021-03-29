@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+## adds runtime.enable function to ~/.bashrc
+## or write as tcl module
+
+set -xe
+
+[ -d ../runtime ] || { : USAGE : ./bin/setup/runtime/install; pwd; exit 1; }
+[ -e ./bin/setup/runtime/enable ] || { : ERROR : no enable function available; exit 1; }
+
+echo $(pwd)
+
+cp ~/.bashrc ~/.bashrc-backup
+grep runtime.enable ~/.bashrc && { : NOOP : function already present; exit 0; }
+
+
+envsubst < ./bin/setup/runtime/enable >> ~/.bashrc
+
+: NOTICE : start a new shell for runtime.enable function to be loaded

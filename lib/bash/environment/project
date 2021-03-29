@@ -1,0 +1,3 @@
+PROJECT=${PROJECT:-$(basename ${WORKSPACE})} ## all versions
+NAME="$(basename ${WORKSPACE}):$(version)"  ## container/image "name" field
+

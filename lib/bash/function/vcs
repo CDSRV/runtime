@@ -1,0 +1,4 @@
+## determine version control system of current scope
+vcs () {
+[ -d .git ] && VCS=git; echo $VCS
+}

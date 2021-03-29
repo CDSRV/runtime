@@ -1,0 +1,7 @@
+version () 
+{ 
+	export BRANCH=$(branch)
+	export REV=$(rev)
+	export VERSION=${BRANCH}.${REV}
+	echo $VERSION
+}
