@@ -1,1 +1,16 @@
-GOPATH=$HOME/go
+GOVERSION=${GOVERSION:-1.16.2}
+GOROOT=$WORKSPACE/lib/.go-$GOVERSION
+( echo $PATH | grep $GOROOT/bin &>/dev/null ) || PATH=$GOROOT/bin:$PATH
+GOPATH=$WORKSPACE/lib/go-$GOVERSION
+( echo $PATH | grep $GOPATH/bin &>/dev/null ) || PATH=$GOPATH/bin:$PATH
+
+## REF: https://golang.org/doc/install/source
+#GOROOT=
+#GOROOT_FINAL=
+#GOPATH=
+#GOBIN=
+#GOOS=
+#GOARCH=
+#GOHOSTOS=
+#GOHOSTARCH=
+
