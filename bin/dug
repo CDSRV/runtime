@@ -1,11 +1,22 @@
 #!/usr/bin/env bash
 
+# set -x
+
 ## PURPOSE: wrapper for dig so it 'just works'
 ## - based on BUGS section of dig manpage :
 ## "There are probably too many query options."
+## - returns a concise result, for easy inclusion into working code
 
 ## REF: https://github.com/isc-projects/bind9
+## REF: https://en.wikipedia.org/wiki/Dig_(command)
+## REF: https://en.wikipedia.org/wiki/Dig_Dug
 
+## Examples:
+## dug myhostname # simple name lookup
+## dug 127.0.0.1  # simple address lookup
+## dug $(dug myhostname) # reverse lookup from the resolved address
+## TYPE=MX dug smtp.my.domain # lookup MX record
+ 
 ( which dig &>/dev/null ) || { echo "ERROR: dig package is required"; exit 1; }
 
 INPUT=$1
@@ -17,7 +28,7 @@ INPUT=${INPUT:?-ERROR: IP address or hostname is required}
 
 valid_ip4 ()
 {
-    local  ip=$1
+    local  ip=${INPUT}
     local  stat=1
 
     if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
@@ -32,17 +43,27 @@ valid_ip4 ()
     return $stat
 }
 
+: ADDRESS
+unset ADDRESS
+valid_ip4 && ADDRESS="${INPUT}"
 
-valid_ip4 && dig -x ${IP}
+[ -z $ADDRESS ] || { dig +short -r -x $ADDRESS; exit $?; }
 
 ## TODO:
 ## - if not valid IP4
 ## - validate as IP6
 ## - validate as hostname
 
+valid_name () {
+	getent hosts $NAME
+}
+
+: NAME
 NAME="${INPUT}"
 
-TYPE=${DNS_RECORD_TYPE:-ANY}
+DNS_RECORD_TYPE=${TYPE}  ## eg: TYPE=MX dug host
+TYPE=${DNS_RECORD_TYPE:-A}
 
-dig -t ${TYPE} ${NAME}
+#valid_name && 
+[ -z $NAME ] || { dig +short -t ${TYPE} ${NAME}; exit $?; }
 
