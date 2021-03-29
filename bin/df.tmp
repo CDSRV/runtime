@@ -1,0 +1,1 @@
+df -hT /tmp | tail -n +2 | awk '{print $5}'
