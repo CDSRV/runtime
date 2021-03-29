@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+## adds OS packages from a list or stdin
+
+PKG_TYPE=${PKG_TYPE:?required} 
+
+case $PKG_TYPE in
+	apt)
+	apt-get install -y "$@"
+	;;
+	yum)	
+	yum install -y "$@"
+	;;
+
+esac
