@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #set -x
 set -a
-[ -z $WORKSPACE ] && BASE=$HOME/src
-LIST=clone.list
+set -e
+
 ## if $1, use that and only add to LIST
 # eg, clone http://repo.type CATALOG
 
-#CATALOG=${CATALOG:-${HOME}}
-#BASE=${CATALOG}/src
-#LIST=${BASE}/repo.list
+CATALOG=${CATALOG:-${HOME}}
+BASE=${CATALOG}/src
+REPO_LIST=${BASE}/clone.list
 
 
 url.parse () {
@@ -31,7 +31,7 @@ path="$(echo $url | grep / | cut -d/ -f2-)"
 }
 
 ## parse list
-sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' "$LIST" |
+sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' "$REPO_LIST" |
 while read ENTRY
 	do
 ## check for repo type & set CMD accordingly
