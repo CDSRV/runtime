@@ -16,11 +16,14 @@
 	bash # tested on linux only
 	git clone https://github.com/CDSRV/runtime.git
 	cd runtime
-	# source the required components
+	# source the setup for the current shell
 	. ./bin/setup/bash 
-	. ./bin/setup/git
-	. ./bin/setup/python
-
+	# source or run setup for other frameworks
+	#
+	# use the 'workspace' function to define the current directory as $WORKSPACE
+	workspace
+	# use the 'status' function to output important details of the current environment
+	status
 
 ## REFERENCES
 - https://unix.stackexchange.com/questions/30925/in-bash-when-to-alias-when-to-script-and-when-to-write-a-function
