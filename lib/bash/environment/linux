@@ -1,7 +1,7 @@
 ## determine linux environment / distro
-yum --version && export PKG_TYPE=yum
-apt --version && export PKG_TYPE=apt
-apk --version && export PKG_TYPE=apk
+yum --version &>/dev/null && export PKG_TYPE=yum
+apt --version &>/dev/null && export PKG_TYPE=apt
+apk --version &>/dev/null && export PKG_TYPE=apk
 
 OS="$(uname -s)"
 ARCH="$(uname -m)"

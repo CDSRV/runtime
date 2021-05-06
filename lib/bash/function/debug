@@ -1,0 +1,33 @@
+case_debug () {
+## PURPOSE: set shell debug parameters as needed
+
+[ -z $DEBUG ] && DEBUG=0
+
+case $DEBUG in
+	0)
+	set +o xtrace
+	;;
+	False)
+	set +o xtrace
+	;;
+	false)
+	set +o xtrace
+	;;
+esac #DEBUG
+
+case $DEBUG in
+	1)
+	set -o xtrace
+	: $0 : DEBUG_ACTIVE
+	;;
+	True)
+	set -o xtrace
+	: $0 : DEBUG_ACTIVE
+	;;
+	true)
+	set -o xtrace
+	: $0 : DEBUG_ACTIVE
+	;;
+esac #DEBUG
+
+}

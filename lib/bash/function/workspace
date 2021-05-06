@@ -4,13 +4,23 @@ workspace () {
 
 [ -z $WORKSPACE_DEBUG ] || set -o xtrace
 
+
 SHELL=bash
 
 set -o allexport
 
-WORKSPACE="${1:-$(pwd)}"
+WORKSPACE="$(pwd)"
+
+## set clean environment
+[ "$1" = "reload" ] &&  echo "... reloading workspace $WORKSPACE" && . ${WORKSPACE}/lib/${SHELL}/environment/.PATH.init && type module &>/dev/null && module reload
+echo PATH=$PATH > ${WORKSPACE}/lib/${SHELL}/environment/.PATH.init
+## or store in tmpfs or env
+
+
 ( echo $PATH | grep "${WORKSPACE}" &>/dev/null ) || PATH=$WORKSPACE/bin:$PATH
 
+
+## IN ORDER
 
 : FUNCTION
 LIBS="${WORKSPACE}/lib/${SHELL}/function"
