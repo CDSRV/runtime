@@ -3,11 +3,19 @@
 set -a
 set -e
 
+case_debug
+
+## PURPOSE: clone repos from a flat list & place into CATALOG
+
 ## if $1, use that and only add to LIST
 # eg, clone http://repo.type CATALOG
 
-CATALOG=${CATALOG:-${HOME}}
-BASE=${CATALOG}/src
+CATALOG=${WORKSPACE}/src #:-$HOME/src}
+touch $CATALOG/.  || { : "ERROR: can't write to CATALOG $CATALOG"; unset CATALOG; }
+CATALOG=${CATALOG:?required}
+
+#BASE=${CATALOG}/src
+
 REPO_LIST=${BASE}/clone.list
 
 
@@ -39,13 +47,13 @@ while read ENTRY
 ## - hg
 ## - svn
 ## - cvs
-# case TYPE in ENTRY
+# case VCS_TYPE in ENTRY   ## VCS=# vcs of current workspace
 # echo "${ENTRY%%#*}"
 	echo REPO_URL=$ENTRY
-	TYPE="${ENTRY##*.}"
+	VCS_TYPE="${ENTRY##*.}"
 # echo TYPE=$TYPE
 
-	case $TYPE in
+	case $VCS_TYPE in
 	git)
 	url.parse $ENTRY ## exports components into current shell
 	DEST=$BASE/$host/$(dirname $path)
@@ -55,9 +63,9 @@ while read ENTRY
 	;;
 
 	*)
-	echo "ERROR : unknown type"; exit 1
+	echo "ERROR : unknown VCS_TYPE"; exit 1
 	;;
-	esac #TYPE
+	esac #VCS_TYPE
 
 done #ENTRY
 

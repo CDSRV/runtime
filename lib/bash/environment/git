@@ -1,1 +1,2 @@
 VCS=git
+GIT_SSH_COMMAND="ssh -v"
