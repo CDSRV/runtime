@@ -1,6 +1,7 @@
 ## 
-type java || JAVA_VERSION=missing return
-env | grep JAVA
+type java &>/dev/null || JAVA_VERSION=missing return
+JAVA_VERSION=$(java -version 2>&1 | head -1 | awk '{print $3}' | tr -d \")
+# env | grep JAVA
 : JAVA_HOME=$JAVA_HOME
 : CLASSPATH=$CLASSPATH
 
