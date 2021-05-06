@@ -1,3 +1,4 @@
 .project
 Dockerfile
 .go-*
+lib/spack/

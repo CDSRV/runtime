@@ -1,0 +1,3 @@
+[[ -d $WORKSPACE/lib/spack ]] && SPACK_ROOT=${WORKSPACE}/lib/spack
+#SPACK_PYTHON= # if needed
+[[ -d $SPACK_ROOT ]] && . $SPACK_ROOT/share/spack/setup-env.sh || unset SPACK_ROOT
