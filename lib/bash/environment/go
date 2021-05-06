@@ -1,8 +1,8 @@
-GOVERSION=${GOVERSION:-1.16.2}
-GOROOT=$WORKSPACE/lib/.go-$GOVERSION
-( echo $PATH | grep $GOROOT/bin &>/dev/null ) || PATH=$GOROOT/bin:$PATH
-GOPATH=$WORKSPACE/lib/go-$GOVERSION
-( echo $PATH | grep $GOPATH/bin &>/dev/null ) || PATH=$GOPATH/bin:$PATH
+type go &>/dev/null && GOVERSION=$(go version 2>&1 | awk '{print $3}' | tr -d go) || unset GOVERSION
+GOROOT=${GOROOT:-$WORKSPACE/lib/.go-$GOVERSION}
+[ -d $GOROOT ] && { ( echo $PATH | grep $GOROOT/bin &>/dev/null ) || PATH=$GOROOT/bin:$PATH; } || unset GOROOT
+GOPATH=${GOPATH:-$WORKSPACE/src/go-$GOVERSION}
+[ -d $GOPATH ] && { (echo $PATH | grep $GOPATH/bin &>/dev/null ) || PATH=$GOPATH/bin:$PATH; } || unset GOPATH
 
 ## REF: https://golang.org/doc/install/source
 #GOROOT=
@@ -14,3 +14,4 @@ GOPATH=$WORKSPACE/lib/go-$GOVERSION
 #GOHOSTOS=
 #GOHOSTARCH=
 
+## or use spack

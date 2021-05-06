@@ -10,9 +10,10 @@ WORKSPACE=${WORKSPACE:?required}
 
 GOVERSION=${GOVERSION:-$1}
 GOVERSION=${GOVERSION:-"1.16.2"}
+## TODO: latest version url from github??
 
-GOROOT=$WORKSPACE/lib/.go-$GOVERSION
-GOPATH=$WORKSPACE/lib/go-$GOVERSION
+GOROOT=$WORKSPACE/lib/golang/go-$GOVERSION
+GOPATH=$WORKSPACE/src/go-$GOVERSION
 
 OS="$(uname -s)"
 ARCH="$(uname -m)"
@@ -66,9 +67,9 @@ tar -C "$GOROOT" --strip-components=1 -xzf "$TEMP_DIRECTORY/go.tar.gz"
 echo "... creating environment variables in workspace"
     {
         echo "GOROOT=${GOROOT}"
-        echo '( echo $PATH | grep $GOROOT/bin &>/dev/null ) || PATH=$GOROOT/bin:$PATH'
+        echo '[ -d "${GOROOT}" ] && ( echo $PATH | grep $GOROOT/bin &>/dev/null ) || PATH=$GOROOT/bin:$PATH'
         echo "GOPATH=$GOPATH"
-	echo '( echo $PATH | grep $GOPATH/bin &>/dev/null ) || PATH=$GOPATH/bin:$PATH'
+	echo '[ -d "${GOPATH}" ] && ( echo $PATH | grep $GOPATH/bin &>/dev/null ) || PATH=$GOPATH/bin:$PATH'
     } >> "$WORKSPACE/lib/bash/environment/go-$GOVERSION"
 
 mkdir -p "${GOPATH}/"{src,pkg,bin}
