@@ -1,6 +1,10 @@
-# REF=https://docs.python.org/3/using/cmdline.html#environment-variables
+## REF:https://docs.python.org/3/using/cmdline.html#environment-variables
 set -a
-PYTHONWARNINGS=default
+## REF: https://stackoverflow.com/questions/14463277/how-to-disable-python-warnings
+PYTHONWARNINGS=${PYTHONWARNINGS:-ignore}
+type python2 &>/dev/null && PY2_VERSION=$(python2 --version 2>&1 | awk '{print $2}')
+type python3 &>/dev/null && PY3_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
+[ -d .local/bin ] && { (echo $PATH | grep .local/bin) || PATH=$HOME/.local/bin:$PATH; }
 #PYTHONPLATLIBDIR=${PYTHONPLATLIBDIR:-undefined} # https://docs.python.org/3/library/sys.html#sys.platlibdir
 #PYTHONSTARTUP
 #PYTHONPYCACHEPREFIX=

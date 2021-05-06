@@ -4,8 +4,8 @@
 
 [ "$(basename $(readlink /proc/$$/exe))" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
 
-# exit if executed directly
-[[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
+# source optional
+# [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
 
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] && echo "# ... loading ${BASH_SOURCE[0]}"
 
@@ -58,7 +58,7 @@ case $PYTHON_MAJOR_VERSION in
 	python2 --version &>/dev/null && $SUDO $PKG_TYPE install -y $PY2_PKG_LIST
 	PY2_VERSION=$(python2 --version 2>&1 | awk '{print $2}')
 	pip2 --version || (( type curl || $SUDO $PKG_TYPE install -y curl ) && curl -ls "${GET_PIP_URL}" | python2 )
-	PATH=$HOME/.local/bin:$PATH
+	(echo $PATH | grep .local/bin) || PATH=$HOME/.local/bin:$PATH
 	type pip2 || : ERROR
 	python2 -m pip install --upgrade $PIP_MODE pip setuptools wheel virtualenv
 	pip2 --version
