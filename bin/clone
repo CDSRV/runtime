@@ -10,13 +10,12 @@ case_debug
 ## if $1, use that and only add to LIST
 # eg, clone http://repo.type CATALOG
 
-CATALOG=${WORKSPACE}/src #:-$HOME/src}
+CATALOG_PREFIX=${CATALOG_PREFIX:-src}
+CATALOG=${CATALOG:-${WORKSPACE}/${CATALOG_PREFIX}} 
 touch $CATALOG/.  || { : "ERROR: can't write to CATALOG $CATALOG"; unset CATALOG; }
 CATALOG=${CATALOG:?required}
 
-#BASE=${CATALOG}/src
-
-REPO_LIST=${BASE}/clone.list
+REPO_LIST=${CATALOG}/repo.list
 
 
 url.parse () {
@@ -56,7 +55,7 @@ while read ENTRY
 	case $VCS_TYPE in
 	git)
 	url.parse $ENTRY ## exports components into current shell
-	DEST=$BASE/$host/$(dirname $path)
+	DEST=$CATALOG/$host/$(dirname $path)
 	CMD="git clone --recurse-submodules"
 	[ -d $DEST ] || mkdir -p $DEST
 	[ -d $DEST/$(basename "${path%.*}") ] || (cd $DEST; echo DEST=$DEST; $CMD $ENTRY)
