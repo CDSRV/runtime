@@ -1,0 +1,7 @@
+set -x
+tag.list
+tag.add TEST_TAG TEST_TAG_MESSAGE
+tag.list
+tag.show TEST_TAG
+tag.remove TEST_TAG
+tag.list
