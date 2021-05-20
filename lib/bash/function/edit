@@ -1,0 +1,4 @@
+## PURPOSE: remove comments and blank lines
+strip_comments () {
+sed -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' ${1}
+}

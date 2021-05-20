@@ -1,0 +1,12 @@
+## REF: https://eklitzke.org/running-build-commands-nicely
+
+# Check if a command exists.
+exists() { command -v "$1" &>/dev/null; }
+
+# Alias a command to run nicely.
+nicealias() {
+  if exists "$1"; then
+    # shellcheck disable=2139,2140
+    alias "$1"="nice $1"
+  fi
+}
