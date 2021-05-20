@@ -1,0 +1,1 @@
+KUBECTL_VERSION=$(kubectl version --client 2>/dev/null | awk '{print $5}' | tr -d GitVersion | tr -d : | tr -d \" | tr -d , | tr -d v )
