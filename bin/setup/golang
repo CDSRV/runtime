@@ -8,12 +8,12 @@
 
 WORKSPACE=${WORKSPACE:?required}
 
-GOVERSION=${GOVERSION:-$1}
-GOVERSION=${GOVERSION:-"1.16.2"}
+GO_VERSION=${GO_VERSION:-$1}
+GO_VERSION=${GO_VERSION:-"1.16.2"}
 ## TODO: latest version url from github??
 
-GOROOT=$WORKSPACE/lib/golang/go-$GOVERSION
-GOPATH=$WORKSPACE/src/go-$GOVERSION
+GOROOT=$WORKSPACE/lib/golang/go-$GO_VERSION
+GOPATH=$WORKSPACE/src/go-$GO_VERSION
 
 OS="$(uname -s)"
 ARCH="$(uname -m)"
@@ -49,7 +49,7 @@ if [ -z "$PLATFORM" ]; then
     return 1
 fi
 
-PACKAGE_NAME="go$GOVERSION.$PLATFORM.tar.gz"
+PACKAGE_NAME="go$GO_VERSION.$PLATFORM.tar.gz"
 TEMP_DIRECTORY=$(mktemp -d)
 
 echo "... downloading $PACKAGE_NAME"
@@ -70,13 +70,13 @@ echo "... creating environment variables in workspace"
         echo '[ -d "${GOROOT}" ] && ( echo $PATH | grep $GOROOT/bin &>/dev/null ) || PATH=$GOROOT/bin:$PATH'
         echo "GOPATH=$GOPATH"
 	echo '[ -d "${GOPATH}" ] && ( echo $PATH | grep $GOPATH/bin &>/dev/null ) || PATH=$GOPATH/bin:$PATH'
-    } >> "$WORKSPACE/lib/bash/environment/go-$GOVERSION"
+    } >> "$WORKSPACE/lib/bash/environment/go-$GO_VERSION"
 
 mkdir -p "${GOPATH}/"{src,pkg,bin}
 
 rm -f "$TEMP_DIRECTORY/go.tar.gz"
 
-. "$WORKSPACE/lib/bash/environment/go-$GOVERSION"
+. "$WORKSPACE/lib/bash/environment/go-$GO_VERSION"
 
 env | grep ^GO
 

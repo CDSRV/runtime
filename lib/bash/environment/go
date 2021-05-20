@@ -1,7 +1,7 @@
-type go &>/dev/null && GOVERSION=$(go version 2>&1 | awk '{print $3}' | tr -d go) || unset GOVERSION
-GOROOT=${GOROOT:-$WORKSPACE/lib/.go-$GOVERSION}
+type go &>/dev/null && GO_VERSION=$(go version 2>&1 | awk '{print $3}' | tr -d go) || unset GO_VERSION
+GOROOT=${GOROOT:-$WORKSPACE/lib/.go-$GO_VERSION}
 [ -d $GOROOT ] && { ( echo $PATH | grep $GOROOT/bin &>/dev/null ) || PATH=$GOROOT/bin:$PATH; } || unset GOROOT
-GOPATH=${GOPATH:-$WORKSPACE/src/go-$GOVERSION}
+GOPATH=${GOPATH:-$WORKSPACE/src/go-$GO_VERSION}
 [ -d $GOPATH ] && { (echo $PATH | grep $GOPATH/bin &>/dev/null ) || PATH=$GOPATH/bin:$PATH; } || unset GOPATH
 
 ## REF: https://golang.org/doc/install/source
