@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+## PURPOSE: pluggable and configurable search with any backend
+
+SEARCH_REPO=${SEARCH_REPO:-local}
+
+SEARCH_TERM=${SEARCH_TERM:-$1}
+SEARCH_TERM=${SEARCH_TERM:?required}
+
+case $SEARCH_REPO in
+	local)
+	SEARCH_PATH=${SEARCH_PATH:-$2}
+	SEARCH_PATH=${SEARCH_PATH:-.}
+	grep -R "${SEARCH_TERM}" "${SEARCH_PATH}"
+	;;
+	*)
+	echo "## ERROR: undefined"
+	## TODO: additional search repos
+	;;
+esac #SEARCH_REPO
