@@ -1,4 +1,11 @@
 ## determine version control system of current scope
 vcs () {
+## TODO: case VCS
 [ -d .git ] && VCS=git; echo $VCS
+}
+
+##
+vcs.status () {
+vcs &>/dev/null
+${VCS}.status
 }

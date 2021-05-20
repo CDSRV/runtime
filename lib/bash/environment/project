@@ -1,3 +1,9 @@
-PROJECT=${PROJECT:-$(basename ${WORKSPACE})} ## all versions
-NAME="$(basename ${WORKSPACE}):$(version)"  ## container/image "name" field
+## PURPOSE: enable separate source and library trees for each project
 
+# project is a label for the workspace
+PROJECT=$(basename ${WORKSPACE}) ## name prefix for all versions
+NAME="$(basename ${WORKSPACE}):$(version)" ## container/image "name" field
+
+# catalog is used to store upstream checkouts and downloads
+CATALOG_PREFIX=${CATALOG_PREFIX:-src}  ## source tree
+CATALOG=${WORKSPACE}/${CATALOG_PREFIX}  ## full path

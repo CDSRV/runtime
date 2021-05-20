@@ -1,6 +1,15 @@
+## TODO: alias workspace workspace.load
 workspace () {
 
 ## PURPOSE: load and activate a workspace directory
+##
+## WORKSPACE
+## may contain: 
+## 	- shell functions, aliases, environments
+## 	- CATALOG tree of source repos
+## 	- linux directory hierarchy
+## used for:
+## 	- root context for tools
 
 [ -z $WORKSPACE_DEBUG ] || set -o xtrace
 
@@ -9,15 +18,23 @@ SHELL=bash
 
 set -o allexport
 
+## TODO: array variable WORKSPACE_LIST or WORKSPACES
+## TODO: workspace.list function
 WORKSPACE="$(pwd)"
 
+
+## TODO: case $1
 ## set clean environment
 [ "$1" = "reload" ] &&  echo "... reloading workspace $WORKSPACE" && . ${WORKSPACE}/lib/${SHELL}/environment/.PATH.init && type module &>/dev/null && module reload
+## TODO: runtime.reload function or use WORKSPACE=$RUNTIME && workspace.reload
+
+## store initial value
+## TODO: store in catalog tree
 echo PATH=$PATH > ${WORKSPACE}/lib/${SHELL}/environment/.PATH.init
-## or store in tmpfs or env
+## or store in tmpfs or env ? 
 
-
-( echo $PATH | grep "${WORKSPACE}" &>/dev/null ) || PATH=$WORKSPACE/bin:$PATH
+## may fail if bin is a symlink - don't do that.
+[ -d $WORKSPACE/bin ] && ( echo $PATH | grep "${WORKSPACE}" &>/dev/null ) || PATH=$WORKSPACE/bin:$PATH
 
 
 ## IN ORDER
@@ -56,3 +73,14 @@ fi
 [ -z $WORKSPACE_DEBUG ] || set +o xtrace
 set +o allexport
 }
+
+## TODO: template catalog
+#workspace.init () {
+## PURPOSE: instantiate template directory structure
+# case $1 in $TEMPLATE
+#}
+
+## TODO: workspace.list function
+#workspace.list () {
+## PURPOSE: list available workspaces
+#}

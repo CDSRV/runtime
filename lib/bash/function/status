@@ -15,7 +15,6 @@ REV=$(rev)
 VERSION=$(version)
 NAME=$NAME
 PWD=$(pwd)
-VCS=$VCS
-## vcs.status:"
-${VCS}.status
+VCS=$(vcs)
+$(vcs.status)"
 }

@@ -47,15 +47,17 @@ echo "# ... loading"
 
 [ -z $DEBUG ] || set -o xtrace
 
+## initial workspace
 export WORKSPACE=${RUNTIME}
 
-## NOTE: load & call workspace runtime function
+## NOTE: load & call workspace function to load current runtime environment
 
 . ${WORKSPACE}/lib/bash/function/workspace
 
-cd $WORKSPACE
+cd ${WORKSPACE}
 workspace
 status
+## runtime tree is a workspace, but not every workspace must have runtime components
 
 ## TODO: import keymaps
 ## TODO: import completions
