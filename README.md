@@ -106,4 +106,4 @@
 ## REFERENCES
 - https://unix.stackexchange.com/questions/30925/in-bash-when-to-alias-when-to-script-and-when-to-write-a-function
 - https://stevebennett.me/2012/02/24/10-things-i-hate-about-git/
-
+- https://eklitzke.org/environment-variables
