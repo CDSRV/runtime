@@ -1,0 +1,9 @@
+## is it so hard just to return a version number?
+
+docker.version () {
+docker -v | cut -d ' ' -f3 | cut -d ',' -f1
+}
+
+docker-compose.version () {
+docker-compose --version | awk '{print $3}' | tr -d ,
+}
