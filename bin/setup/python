@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 
-## PURPOSE: entrypoint for python setup
+## PURPOSE: python setup
 
-[ "$(basename $(readlink /proc/$$/exe))" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
+[ "$EUID" = 0 ] || SUDO="sudo -EH"
 
-# source optional
-# [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
+type apt &>/dev/null && export PKG_TYPE=apt
+type yum &>/dev/null && export PKG_TYPE=yum
 
-[[ "${BASH_SOURCE[0]}" != "${0}" ]] && echo "# ... loading ${BASH_SOURCE[0]}"
+set -e
 
-[ "$EUID" = 0 ] || SUDO="sudo -EH" PIP_MODE="--user"
-
-[ -z $PKG_TYPE ] && . ./bin/setup/bash
 
 PKG_TYPE=${PKG_TYPE:?required}
 [ "$PKG_TYPE" = "apt" ] && $SUDO apt-get update
