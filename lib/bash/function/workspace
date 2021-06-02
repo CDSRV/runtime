@@ -25,12 +25,12 @@ WORKSPACE="$(pwd)"
 
 ## TODO: case $1
 ## set clean environment
-[ "$1" = "reload" ] &&  echo "... reloading workspace $WORKSPACE" && . ${WORKSPACE}/lib/${SHELL}/environment/.PATH.init && type module &>/dev/null && module reload
+[ "$1" = "reload" ] &&  echo "... reloading workspace $WORKSPACE" && . $HOME/.PATH.init && type module &>/dev/null && module reload
 ## TODO: runtime.reload function or use WORKSPACE=$RUNTIME && workspace.reload
 
 ## store initial value
 ## TODO: store in catalog tree
-echo PATH=$PATH > ${WORKSPACE}/lib/${SHELL}/environment/.PATH.init
+echo PATH=$PATH > $HOME/.PATH.init
 ## or store in tmpfs or env ? 
 
 ## may fail if bin is a symlink - don't do that.
