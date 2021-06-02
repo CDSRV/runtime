@@ -40,7 +40,7 @@ echo PATH=$PATH > $HOME/.PATH.init
 ## IN ORDER
 
 : FUNCTION
-LIBS="${WORKSPACE}/lib/${SHELL}/function"
+LIBS="${RUNTIME}/lib/${SHELL}/function"
 if [ -a ${LIBS} ]
 then
 for lib in $LIBS/*
@@ -50,7 +50,7 @@ done
 fi
 
 : ALIAS
-LIBS="${WORKSPACE}/lib/${SHELL}/alias"
+LIBS="${RUNTIME}/lib/${SHELL}/alias"
 if [ -a ${LIBS} ]
 then
 for lib in $LIBS/*
@@ -60,7 +60,7 @@ done
 fi
 
 : ENVIRONMENT
-LIBS="${WORKSPACE}/lib/${SHELL}/environment"
+LIBS="${RUNTIME}/lib/${SHELL}/environment"
 if [ -a ${LIBS} ]
 then
 for lib in $LIBS/*
