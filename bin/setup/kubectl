@@ -33,6 +33,8 @@ curl -LO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/$OS/$ARCH/kubectl.sh
 ## NOTE: instructions in documentation are incorrect - URL for sha256 sum file is missing /release/ in path
 
 DEST=${DEST:-${WORKSPACE}/bin}
+[ $EUID = 0 ] && DEST=/usr/local/bin
+
 cp ${TMP_DIR}/kubectl "${DEST}/kubectl"
 chmod 755 "${DEST}/kubectl"
 # or
