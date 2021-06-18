@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-git pull
+## TODO: all/some
+git pull --all
