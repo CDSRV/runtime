@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-set -x
+
+## PURPOSE: convenience function
+## REF: https://docs.docker.com/engine/reference/commandline/start/
+## REF: https://docs.docker.com/engine/reference/commandline/attach/
+
 set -a
+
+case_debug
 
 . $WORKSPACE/etc/docker/login.properties
 
-CONTAINER=$(docker ps -a --filter name=$NAME --format "{{.Names}}") ## INSTANCE:
+CONTAINER=$(docker ps -a --filter name=$NAME --format "{{.Names}}") ## this returns 0 even if no container is found
 
-[ $CONTAINER = $NAME ] && ( docker start $NAME; docker attach $NAME )
+[ -z $CONTAINER ] && { docker.run; exit $?; }
 
-[ -z $CONTAINER ] && docker.run
-docker ps -s -a --filter name=$NAME
+[ -z $CONTAINER ] || ( docker start $NAME && docker attach $NAME )

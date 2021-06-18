@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
-set -x
 
 ## PURPOSE: generic wrapper for "docker run"
 ## REF: https://docs.docker.com/engine/reference/run/
+## REF: https://stackoverflow.com/questions/38576337/how-to-execute-a-bash-command-only-if-a-docker-container-with-a-given-name-does
+## REF: https://unix.stackexchange.com/questions/343942/shell-check-if-docker-container-is-existing
 
-. $WORKSPACE/etc/docker/run.properties
+set -a
+
+case_debug
+
+. $WORKSPACE/etc/docker/run.properties 
 
 ARG=${ARG:-$1}
 
-: ... starting container 
+CONTAINER=$(docker ps -a --filter name=$NAME --format "{{.Names}}") ## this returns 0 even if no container is found
 
-docker run $OPTIONS $IMAGE $COMMAND $ARG
 
-#docker run \
-#--name $NAME \
-#-w $WORKDIR \
-#--mount "${MOUNT}" \
-#$TTY_MODE $IMAGE $RUN_CMD
+[ -z $CONTAINER ] && { docker run $OPTIONS $IMAGE $COMMAND $ARG; exit $?; }
+
+[ -z $CONTAINER ] || docker.login
+

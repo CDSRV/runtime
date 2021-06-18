@@ -1,1 +1,1 @@
-docker rm $(basename $WORKSPACE)
+docker rm ${PROJECT}.$(branch)
