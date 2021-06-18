@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+case_debug
+
+## TODO: VCS optional
+VCS=${VCS:-git}
+[ -d ./.${VCS} ] || { : ERROR - VCS directory not found; exit 1; } 
+REV=$(rev)
+
+REPO=$(basename $(pwd))
+ARCHIVE_NAME="$(today)-$(now)-${REPO}.${REV}"
+## 
+ARCHIVE_FORMAT=${ARCHIVE_FORMAT:-tgz}
+case $ARCHIVE_FORMAT in
+	tgz)
+	( cd ../ && tar cvzf ${ARCHIVE_NAME}.tgz ./${REPO} )
+	;;
+	*)
+	: ... not implemented
+	;;
+esac #ARCHIVE_FORMAT

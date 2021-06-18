@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -x
+
+
+VCS=${VCS:-git}
+[ -d ./.${VCS} ] || { : ERROR - VCS directory not found; exit 1; } 
+REV=$(rev)
+
+REPO=$(basename $(pwd))
+
+IMPORT_PATH=${IMPORT_PATH:-$1}
+IMPORT_PATH=${IMPORT_PATH:?required}
+
+## 
+IMPORT_METHOD=${IMPORT_METHOD:-rsync}
+case $IMPORT_METHOD in
+	rsync)
+	#n=n ## dry run
+	RSYNC_OPTIONS=${RSYNC_OPTIONS:--av${n}}
+	EXCLUDE="--exclude=.${VCS} --exclude=src/" ## TODO: from file
+	#INCLUDE=
+	rsync $RSYNC_OPTIONS ${EXCLUDE} ${INCLUDE} ${IMPORT_PATH}/ .
+	;;
+	*)
+	: ... not implemented
+	;;
+esac #IMPORT_METHOD
