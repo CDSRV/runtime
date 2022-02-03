@@ -107,3 +107,4 @@
 - https://unix.stackexchange.com/questions/30925/in-bash-when-to-alias-when-to-script-and-when-to-write-a-function
 - https://stevebennett.me/2012/02/24/10-things-i-hate-about-git/
 - https://eklitzke.org/environment-variables
+- https://dev.to/thefluxapex/turn-any-bash-function-alias-into-a-hybrid-executable-source-able-script-53a3
