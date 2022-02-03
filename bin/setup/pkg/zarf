@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+case_debug || true 
+
+[ -z $WORKSPACE ] && WORKSPACE=.
+
+cd $WORKSPACE/lib
+
+[ -d zarf ] || mkdir zarf
+
+cd zarf
+
+## TODO: pick 'latest' tag : https://repo1.dso.mil/platform-one/big-bang/apps/product-tools/zarf/-/tags
+ZARF_VERSION=${ZARF_VERSION:-0.14.0}
+
+[ -d $ZARF_VERSION ] || mkdir $ZARF_VERSION
+
+cd $ZARF_VERSION
+
+## linked from ## https://repo1.dso.mil/platform-one/big-bang/apps/product-tools/zarf/
+ZARF_REPO=https://zarf-public.s3-us-gov-west-1.amazonaws.com/release/v${ZARF_VERSION}
+
+## TODO: if platform = linux
+wget -c $ZARF_REPO/zarf.sha256
+wget -c $ZARF_REPO/zarf-init.tar.zst
+wget -c $ZARF_REPO/zarf
+
+## to prevent shasum error for missing files
+grep -v mac ./zarf.sha256 > zarf-linux.sha256
+
+shasum -c ./zarf-linux.sha256
+
+rm ${WORKSPACE}/bin/zarf || true
+
+## TODO: relative link for portability
+ln -s $WORKSPACE/lib/zarf/$ZARF_VERSION/zarf ${WORKSPACE}/bin/zarf
+
+chmod +x $WORKSPACE/lib/zarf/$ZARF_VERSION/zarf
+
+## TODO: if platform = mac
+
+

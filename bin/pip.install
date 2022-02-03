@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-pip install --upgrade --user $@
+TODO: if root install globally
+
+pip3 install --upgrade --user $@

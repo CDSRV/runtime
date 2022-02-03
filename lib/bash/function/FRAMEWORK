@@ -1,0 +1,5 @@
+## prototype function definition for $FRAMEWORK
+
+#$FRAMEWORK.version () {
+# return version in decimal notation
+#}

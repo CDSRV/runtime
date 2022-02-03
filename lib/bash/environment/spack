@@ -1,3 +1,15 @@
-[[ -d $WORKSPACE/lib/spack ]] && SPACK_ROOT=${WORKSPACE}/lib/spack
-#SPACK_PYTHON= # if needed
-[[ -d $SPACK_ROOT ]] && . $SPACK_ROOT/share/spack/setup-env.sh || unset SPACK_ROOT
+## REF: https://spack-tutorial.readthedocs.io/en/latest/tutorial_configuration.html
+
+unset SPACK_ROOT
+
+[ -x ${WORKSPACE}/opt/spack/bin/spack ] && SPACK_ROOT=${WORKSPACE}/opt/spack
+
+[ -x ${WORKSPACE}/lib/spack/bin/spack ] && SPACK_ROOT=${WORKSPACE}/lib/spack
+
+#SPACK_PYTHON= # if needed - spack env does this?
+
+## TODO: determine if SPACK_ROOT is writeable
+
+[ -z $SPACK_ROOT ] || . $SPACK_ROOT/share/spack/setup-env.sh
+
+( echo $PATH | grep "${SPACK_ROOT}" ) &>/dev/null || PATH=$SPACK_ROOT/bin:$PATH

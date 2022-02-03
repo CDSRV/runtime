@@ -1,0 +1,2 @@
+dnf install -y dnf-utils dnf-plugins-core dnf-plugin-config-manager
+

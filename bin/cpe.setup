@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+case_debug
+
+# require_root || exit 1
+
+
+RUNTIME=${RUNTIME:?required}
+PKG_TYPE=${PKG_TYPE:?required}
+
+case $OS in
+    Linux)
+    true
+    ;;
+    *)
+    $PRINT WARN: not tested with OS: $OS
+    ;;
+esac #OS
+
+case $ARCH in
+    x86_64)
+    true
+    ;;
+    *)
+    $PRINT WARN: $ARCH ARCH features may require additional packages
+    ## TODO: 
+    ;;
+esac #ARCH
+
+case $CPE in
+    fedora)
+    true
+    ;;
+    *)
+    #{ $PRINT ERROR: no modules available for CPE: $CPE; exit 1; }
+    ## TODO: add distro support
+    ;;
+esac #CPE
+
+LIB=${RUNTIME}/lib/cpe/$CPE
+[ -e "${LIB}" ] || { $PRINT ERROR: CPE library not found; exit 1; }
+
+cd $LIB
+## steps
+. ./init  # conflicts with 'init' top level cmd

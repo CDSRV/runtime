@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+## PURPOSE: python setup
+
+[ "$EUID" = 0 ] || SUDO="sudo -EH"
+
+type apt &>/dev/null && export PKG_TYPE=apt
+type yum &>/dev/null && export PKG_TYPE=yum
+
+set -e
+
+
+PKG_TYPE=${PKG_TYPE:?required}
+[ "$PKG_TYPE" = "apt" ] && $SUDO apt-get update
+
+GET_PIP_URL=${GET_PIP_URL:-https://bootstrap.pypa.io/pip/2.7/get-pip.py}
+
+set -a
+
+case $PKG_TYPE in
+	apt)
+	PY2_PKG="python"
+	PY2_PKG_LIST="python-dev python-setuptools"
+	PY3_PKG="python3"
+	PY3_PKG_LIST="python3-pip"
+	;;
+	yum)
+	PY2_PKG="python2"
+	PY2_PKG_LIST="python2-devel"
+	PY3_PKG="python3"
+	PY3_PKG_LIST="python3-pip"
+	;;
+esac #PKG_TYPE
+
+PYTHON_MAJOR_VERSION=$1
+
+PYTHON_MAJOR_VERSION=${PYTHON_MAJOR_VERSION:-3}
+
+## REQUIREMENTS: 
+# - load OS packages
+# - load pip
+# - set constants for PYENV
+
+
+## REF: https://docs.python.org/3/using/cmdline.html#environment-variables
+## REF: https://packaging.python.org/tutorials/installing-packages/#requirements-for-installing-packages
+## REF: https://packaging.python.org/tutorials/installing-packages/#ensure-you-can-run-python-from-the-command-line
+## 
+
+set -x
+case $PYTHON_MAJOR_VERSION in
+	2)
+	python2 --version &>/dev/null || $SUDO $PKG_TYPE install -y $PY2_PKG
+	type python2 || : ERROR
+	python2 --version &>/dev/null && $SUDO $PKG_TYPE install -y $PY2_PKG_LIST
+	PY2_VERSION=$(python2 --version 2>&1 | awk '{print $2}')
+	pip2 --version || (( type curl || $SUDO $PKG_TYPE install -y curl ) && curl -ls "${GET_PIP_URL}" | python2 )
+	(echo $PATH | grep .local/bin) || PATH=$HOME/.local/bin:$PATH
+	type pip2 || : ERROR
+	python2 -m pip install --upgrade $PIP_MODE pip setuptools wheel virtualenv
+	pip2 --version
+	virtualenv -h &>/dev/null && PY2_VENV=available
+	;;
+
+	3)
+	python3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y $PY3_PKG
+	type python3 || : ERROR
+	PY3_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
+	pip3 --version &>/dev/null ||  $SUDO $PKG_TYPE install -y $PY3_PKG_LIST
+	type pip3 || : ERROR
+	pip3 --version
+	python3 -m venv -h &>/dev/null && PY3_VENV=available
+	;;
+	
+	4)
+	echo "ERROR: not implemented
+	: REF: https://opensource.com/life/14/9/why-python-4-wont-be-python-3
+	: REF: https://www.reddit.com/r/Python/comments/7zvyhx/pep_563_mentions_python_40_whats_going_on/
+	: REF: https://twitter.com/gvanrossum/status/1306082472443084801
+	"
+	;;
+	
+	*)
+	echo "ERROR: not implemented"
+	;;
+
+esac #PYTHON_MAJOR_VERSION
+
+set +x
+set +a
+
+unset PYTHON_MAJOR_VERSION
+unset PY2_PKG
+unset PY2_PKG_LIST
+unset PY3_PKG
+unset PY3_PKG_LIST
+
+echo "## DONE : python setup"
+env | grep ^PY | sort
+
+## END 

@@ -1,0 +1,3 @@
+## specify output format for date functions
+DATE_FORMAT="iso-8601"
+#DATE_FORMAT="rfc-3339"

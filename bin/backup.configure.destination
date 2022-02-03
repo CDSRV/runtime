@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+set -e
+
+case_debug
+
+$PRINT START=$(log_time)
+print.host
+
+BACKUP_CONFIG=${BACKUP_CONFIG:-$RUNTIME/etc/backup}
+
+$PRINT CHECKING CONFIG
+[ -a $BACKUP_CONFIG ] || { $PRINT ERROR - accessing BACKUP_CONFIG : $BACKUP_CONFIG; exit 1; }
+
+
+destination.available (){
+$PRINT "AVAILABLE DESTINATIONS:"
+
+for DESTINATION_PROFILE in $BACKUP_CONFIG/target/destination/*.properties
+    do
+    echo "--------------------"
+    DESTINATION=$(basename $DESTINATION_PROFILE)
+    DESTINATION=${DESTINATION%%.properties}
+    $PRINT "DESTINATION: "$DESTINATION
+    $PRINT "FILE: " $(ls -la $BACKUP_CONFIG/target/destination/$DESTINATION.properties)
+    echo ""
+    cat $BACKUP_CONFIG/target/destination/$DESTINATION.properties
+    $PRINT "VOLUMES: "
+    cat $BACKUP_CONFIG/target/destination/$DESTINATION.volumes
+    echo ""
+done
+
+$PRINT "DONE: ${FUNCNAME[0]}"
+}
+
+destination.write () {
+$PRINT "DESTINATION NAME:"
+read DESTINATION
+    [ -e $BACKUP_CONFIG/target/destination/$DESTINATION.properties ] &&\
+    $PRINT ".. reading destination config" &&\
+    . $BACKUP_CONFIG/target/destination/$DESTINATION.properties
+
+## TODO
+
+echo "
+TODO" > $BACKUP_CONFIG/target/destination/$DESTINATION.properties
+
+$PRINT "$DESTINATION config created at $BACKUP_CONFIG/target/destination/$DESTINATION.properties"
+ls -la $BACKUP_CONFIG/target/destination/$DESTINATION.properties
+}
+
+destination.available
+
+exit
+$PRINT "ENTER NEW DESTINATIONS? [ctrl-c to exit]"
+read CONTINUE
+
+$PRINT "DESTINATION_NAME:"
+read DESTINATION
+
+$PRINT "DESTINATION_TYPE [local,http,rsync]
+read DESINATION_TYPE
+
+

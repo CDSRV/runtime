@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+## setup virtualbox
+
+## FEDORA
+BASE_URL=https://download.virtualbox.org/virtualbox
+
+## TODO: pkg type & distro name
+REPO=$BASE_URL/rpm/fedora/virtualbox.repo
+
+TMP_DIR=${TMP_DIR:-/tmp}
+
+VERSION=${VBOX_VERSION:-$(curl -ls $BASE_URL/LATEST.TXT)}
+
+MAJOR_VERSION=${VERSION%.*}
+
+curl -ls $REPO -o /etc/yum.repos.d/virtualbox.repo
+
+yum install -y dkms kernel-devel
+
+yum install -y VirtualBox-$MAJOR_VERSION virtualbox-guest-additions
+
+
+EXTPACK_SHA=$(curl -ls $BASE_URL/${VERSION}/SHA256SUMS | head -1 | awk '{print $1}' )
+
+FILE=Oracle_VM_VirtualBox_Extension_Pack-$VERSION.vbox-extpack
+
+curl -ls $BASE_URL/${VERSION}/$FILE -o $TMP_DIR/$FILE
+
+echo y | VBoxManage extpack install --replace --accept-license=$EXTPACK_SHA $TMP_DIR/$FILE
+

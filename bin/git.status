@@ -2,7 +2,12 @@
 
 ## REF: https://git-scm.com/docs/git-status
 
-GIT_MODE="--porcelain=v2" ## non-interactive
+case_debug &>/dev/null
 
+GIT_MODE=${GIT_MODE:-"--porcelain=v2"} ## non-interactive
 [ -z $INTERACTIVE ] && unset GIT_MODE
-git status -vsb $GIT_MODE --ignored=matching
+
+GIT_STATUS_OPTIONS=${GIT_STATUS_OPTIONS:-"-sb"}
+GIT_SHOW_IGNORED=${GIT_SHOW_IGNORED:-traditional}
+
+git status "${GIT_STATUS_OPTIONS}" $GIT_MODE --ignored=$GIT_SHOW_IGNORED "$@"

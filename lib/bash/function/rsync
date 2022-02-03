@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+VERBOSE=q
+[[ "$OUTPUT_STYLE" = "verbose" ]] && VERBOSE=v
+
+rsync.require () {
+VOLUME=${VOLUME:?required}
+PREFIX_PATH=${PREFIX_PATH:?required}
+BASE_PATH=${BASE_PATH:?required}
+}
+
+rsync.options () {
+case $POLICY in
+    mirror)
+    DELETE="--delete --delete-excluded"
+    OPTIONS="aXWHi $DELETE"
+    ;;
+
+    accumulate)
+    OPTIONS="aXWHi"
+    ;;
+esac #POLICY
+}
+
+rsync.local () {
+    rsync.require
+    rsync.options
+    rsync \
+    -${TEST}${VERBOSE}${OPTIONS} \
+    --exclude-from=${EXCLUDE_FILE} \
+    --include-from=${INCLUDE_FILE} \
+    ${BASE_PATH} ${VOLUME}${PREFIX_PATH}${BASE_PATH}
+}
+
+rsync.ssh () {
+    rsync.require
+    rsync.options
+    SSH="ssh"
+    [[ "$OUTPUT_STYLE" = "verbose" ]] && SSH="${SSH} -v"    
+    rsync \
+    -${TEST}${VERBOSE}${OPTIONS} \
+    --exclude-from=${EXCLUDE_FILE} \
+    --include-from=${INCLUDE_FILE} \
+    ${BASE_PATH} -e ssh $USER@$HOST:/${VOLUME}${PREFIX_PATH}${BASE_PATH}
+}
+
+rsync.rsync () {
+    rsync.options
+    rsync \
+    -${TEST}${VERBOSE}${OPTIONS} \
+    --exclude-from=${EXCLUDE_FILE} \
+    --include-from=${INCLUDE_FILE} \
+    ${BASE_PATH} rsync://$USER@$HOST:$PORT/${VOLUME}${PREFIX_PATH}${BASE_PATH}
+}

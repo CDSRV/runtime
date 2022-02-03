@@ -1,0 +1,1 @@
+alias find='/usr/bin/find "${@}" 2>/dev/null' 

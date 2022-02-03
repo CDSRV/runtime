@@ -1,1 +1,2 @@
+## TODO: time resolution options
 date +%H-%M-%S

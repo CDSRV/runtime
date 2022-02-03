@@ -1,19 +1,54 @@
 #!/usr/bin/env bash
 
-## adds runtime.enable function to ~/.bashrc
-## or write as tcl module
+## PURPOSE:
+## adds runtime.enable function to system or user environment
+## - loads toolkit at the location
+## 
+## REF: https://stackoverflow.com/questions/20010199/how-to-determine-if-a-process-runs-inside-lxc-docker
 
 set -xe
 
+## WORKSPACE not setup yet
 [ -d ../runtime ] || { : USAGE : ./bin/setup/runtime/install; pwd; exit 1; }
-[ -e ./bin/setup/runtime/enable ] || { : ERROR : no enable function available; exit 1; }
 
-echo $(pwd)
-
-cp ~/.bashrc ~/.bashrc-backup
-grep runtime.enable ~/.bashrc && { : NOOP : function already present; exit 0; }
+## : USAGE: export RUNTIME=/path/to/git/checkout/runtime install
+RUNTIME=${RUNTIME:-$(pwd)}
 
 
-envsubst < ./bin/setup/runtime/enable >> ~/.bashrc
+IS_CONTAINER=false
+( [[ -f /.dockerenv ]] || grep -Eq '(lxc|docker)' /proc/1/cgroup) && IS_CONTAINER=true
 
-: NOTICE : start a new shell for runtime.enable function to be loaded
+CONFIG_FILE=/tmp/runtime-enable-test-config
+
+###
+append_enable_function () {
+echo "
+##
+runtime.enable () {
+    export LANG=en_US.UTF-8
+    . ${RUNTIME}/bin/setup/bash
+}
+##" >> $FILE
+}
+###
+
+case $IS_CONTAINER in 
+    true)
+    : ... in a container
+    FILE=/etc/profile.d/runtime.sh    
+    . $FILE && type runtime.enable && { : NOOP : function already present; exit 0; }
+    append_enable_function
+    echo "runtime.enable" >> $FILE
+    ;;
+
+    false)
+    : ... no container detected
+    FILE=${HOME}/.bashrc
+    . $FILE && type runtime.enable && { : NOOP : function already present; exit 0; }
+    append_enable_function
+    ;;
+esac ## IS_CONTAINER
+
+: NOTICE : ". $FILE" or start a new shell for the runtime.enable function to be loaded
+
+

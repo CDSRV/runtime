@@ -7,3 +7,8 @@ docker -v | cut -d ' ' -f3 | cut -d ',' -f1
 docker-compose.version () {
 docker-compose --version | awk '{print $3}' | tr -d ,
 }
+
+container.name () {
+NAME="${PROJECT}.$(branch)"
+docker ps -a --filter name=$NAME --format "{{.Names}}"
+}

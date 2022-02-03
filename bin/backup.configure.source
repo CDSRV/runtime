@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+set -e
+
+case_debug
+
+$PRINT START=$(log_time)
+$PRINT UNAME=$(print.host)
+
+BACKUP_CONFIG=${BACKUP_CONFIG:-$RUNTIME/etc/backup}
+
+$PRINT CHECKING CONFIG
+[ -a $BACKUP_CONFIG ] || { $PRINT ERROR - accessing BACKUP_CONFIG : $BACKUP_CONFIG; exit 1; }
+
+
+source.available (){
+$PRINT "AVAILABLE SOURCES:"
+
+for SOURCE_PROFILE in $BACKUP_CONFIG/target/source/*.properties
+    do
+    echo "--------------------"
+    SOURCE=$(basename $SOURCE_PROFILE)
+    SOURCE=${SOURCE%%.properties}
+    $PRINT "SOURCE: "$SOURCE
+    $PRINT "FILE: " $(ls -la $BACKUP_CONFIG/target/source/$SOURCE.properties)
+    echo ""
+    cat $BACKUP_CONFIG/target/source/$SOURCE.properties
+    echo ""
+done
+}
+
+source.write () {
+
+$PRINT "SOURCE NAME:"
+read SOURCE
+    [ -e $BACKUP_CONFIG/target/source/$SOURCE.properties ] &&\
+    ## TODO: update existing?
+    #$PRINT ".. reading source config" &&\
+    #. $CONFIG_ROOT/target/source/$SOURCE.properties
+
+    [ -z $BASE_PATH ] && $PRINT "BASE_PATH:" && read BASE_PATH
+    [ -z $METHOD ] && $PRINT "METHOD" && read METHOD
+    [ -z $DESTINATION ] && $PRINT "DESTINATION:" && read DESTINATION
+
+echo "
+BASE_PATH=$BASE_PATH
+METHOD=$METHOD
+DESTINATION=$DESTINATION
+" > $BACKUP_CONFIG/target/source/$SOURCE.properties
+
+$PRINT "$SOURCE config created at $BACKUP_CONFIG/target/source/$SOURCE.properties"
+ls -la $BACKUP_CONFIG/target/source/$SOURCE.properties
+
+##
+ls -la $BACKUP_CONFIG/target/source/$SOURCE.include || touch $BACKUP_CONFIG/target/source/$SOURCE.include
+ls -la $BACKUP_CONFIG/target/source/$SOURCE.exclude || touch $BACKUP_CONFIG/target/source/$SOURCE.exclude
+
+$PRINT "SPECIFY INCLUDES+EXCLUDES ? [ctrl-c to exit]"
+read CONTINUE
+
+$PRINT "INCLUDE:"
+echo "%% TODO"
+
+}
+
+source.available
+
+exit
+## TODO: while true
+$PRINT "ENTER NEW SOURCES? [ctrl-c to exit]"
+read CONTINUE && source.write
+
+
+
+

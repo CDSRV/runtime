@@ -1,0 +1,32 @@
+## REF: https://tldp.org/LDP/abs/html/functions.html
+## REF: https://stackoverflow.com/questions/1835943/how-to-determine-function-name-from-inside-a-function
+
+function foo {
+    echo foo
+    echo "In function $FUNCNAME: FUNCNAME=${FUNCNAME[*]}" >&2
+}
+
+function foobar {
+    echo "$(foo)bar"
+    echo "In function $FUNCNAME: FUNCNAME=${FUNCNAME[*]}" >&2
+}
+
+#foobar
+
+test () {
+echo ${FUNCNAME[0]}
+echo ACTION=$ACTION
+}
+
+test.a () {
+ACTION=a
+    test
+( SUBSHELL=active )
+STATE=export
+}
+
+set -x
+
+test.a
+echo STATE=$STATE
+echo SUBSHELL=$SUBSHELL

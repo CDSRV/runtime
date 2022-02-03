@@ -1,9 +1,7 @@
 ## REF: http://man7.org/linux/man-pages/man1/date.1.html
 today.path () {
-#date --iso-8601=date | tr - /
-today | tr - /
+date --iso-8601=date | tr - /
 }
 now.path () {
-#date +%H-%M-%S | tr - /
-now | tr - /
+date +%H-%M-%S | tr - /
 }

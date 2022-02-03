@@ -9,12 +9,14 @@ set -a
 
 case_debug
 
-. $WORKSPACE/etc/docker/run.properties 
+. $RUNTIME/etc/docker/run.properties &>/dev/null
+. $WORKSPACE/etc/docker/run.properties &>/dev/null
 
 ARG=${ARG:-$1}
 
 CONTAINER=$(docker ps -a --filter name=$NAME --format "{{.Names}}") ## this returns 0 even if no container is found
 
+docker pull $IMAGE
 
 [ -z $CONTAINER ] && { docker run $OPTIONS $IMAGE $COMMAND $ARG; exit $?; }
 

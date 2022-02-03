@@ -5,3 +5,4 @@ version ()
 	export VERSION=${BRANCH}.${REV}
 	echo $VERSION
 }
+## MAJOR.MINOR.MICRO[.qualifier]

@@ -1,0 +1,21 @@
+## REF: http://man7.org/linux/man-pages/man1/date.1.html
+## REF: https://www.w3.org/TR/NOTE-datetime
+
+DATE_FORMAT=${DATE_FORMAT:-iso-8601}
+
+today () {
+date --${DATE_FORMAT}=date
+}
+
+now () {
+date +%H:%M:%S
+}
+
+timezone () {
+date +%z
+}
+
+log_time () {
+date --${DATE_FORMAT}=seconds
+}
+

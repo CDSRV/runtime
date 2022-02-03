@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+## PURPOSE: setup all necessary tools for AWS APIs
+
+## REF: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+
+## adding these as PIP packages for easy updates
+
+pip.install awscli awsebcli aws-shell aws-sam-cli
+
+( type npm &>/dev/null ) || $RUNTIME/bin/setup/pkg/nodejs
+
+npm install aws-cdk

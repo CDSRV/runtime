@@ -1,5 +1,6 @@
 workspace.status () {
-echo "\
+case_debug
+$PRINT "\
 PATH=$PATH
 RUNTIME=$RUNTIME
 WORKSPACE=$WORKSPACE

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+yum install -y etckeeper git
+
+
+
+IGNORE_LIST="
+## anything that should not be pushed upstream
+
+resolv.conf
+cups/printers.conf
+cups/printers.conf.*
+
+ssh/*key
+ssh/*.pub
+
+#passwd
+passwd-
+shadow
+shadow-
+#group
+group-
+gshadow
+gshadow-
+
+#pki
+
+## systemd
+.updated
+"
+
+
+cd /etc
+etckeeper init
+git reset
+
+echo "$IGNORE_LIST" >> /etc/.gitignore
+
+git config --global user.email "root@localhost"
+git config --global user.name "ROOT"
+
+
+git add .
+git commit -m "INIT"
+
+
+echo "AVOID_DAILY_AUTOCOMMITS=1" >> /etc/etckeeper/etckeeper.conf
+
+#echo "## FULL MANUAL CONTROL RECOMMENDED FOR SERVERS"  >> /etc/etckeeper/etckeeper.conf
+#echo "AVOID_COMMIT_BEFORE_INSTALL=1" >> /etc/etckeeper/etckeeper.conf

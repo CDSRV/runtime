@@ -1,0 +1,3 @@
+if_zsh () {
+[ "$(basename $(readlink /proc/$$/exe))" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
+}

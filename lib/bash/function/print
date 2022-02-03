@@ -1,0 +1,14 @@
+print.error () {
+case_debug
+$PRINT "ERROR: $(today)-$(now) : $(hostname):$(pwd) : $0" 
+}
+
+print.warn () {
+case_debug
+$PRINT WARN
+}
+
+print.host () {
+case_debug
+$PRINT $(uname -a)
+}

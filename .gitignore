@@ -2,3 +2,6 @@
 Dockerfile
 .go-*
 lib/spack/
+lib/golang/
+lib/nodejs/
+var/log/

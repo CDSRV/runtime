@@ -1,0 +1,17 @@
+digraph lib {
+rankdir=LR;
+graph [fontname = helvetica];
+node [shape=record];
+"lib" -> "bash";
+"bash" [label="bash"];
+"bash" -> "bash/alias";
+"bash/alias" [label="alias"];
+"bash" -> "bash/function";
+"bash/function" [label="function"];
+"bash" -> "bash/environment";
+"bash/environment" [label="environment"];
+"lib" -> "python";
+"python" [label="python"];
+"lib" -> "golang";
+"golang" [label="golang"];
+}

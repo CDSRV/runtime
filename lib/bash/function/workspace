@@ -53,6 +53,7 @@ fi
 LIBS="${RUNTIME}/lib/${SHELL}/alias"
 if [ -a ${LIBS} ]
 then
+shopt -s expand_aliases
 for lib in $LIBS/*
 do
 . $lib

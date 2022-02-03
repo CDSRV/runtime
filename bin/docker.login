@@ -8,7 +8,9 @@ set -a
 
 case_debug
 
-. $WORKSPACE/etc/docker/login.properties
+. $RUNTIME/etc/docker/login.properties &>/dev/null
+. $WORKSPACE/etc/docker/login.properties &>/dev/null
+
 
 CONTAINER=$(docker ps -a --filter name=$NAME --format "{{.Names}}") ## this returns 0 even if no container is found
 

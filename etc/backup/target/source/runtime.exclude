@@ -1,0 +1,10 @@
+/proc
+/dev
+/var/cache
+/tmp
+.git
+.repo
+lib/spack
+lib/golang
+src/go-*
+var/log

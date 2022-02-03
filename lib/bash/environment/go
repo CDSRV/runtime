@@ -1,6 +1,8 @@
-type go &>/dev/null && GO_VERSION=$(go version 2>&1 | awk '{print $3}' | tr -d go) || unset GO_VERSION
+( type $GOROOT/bin/go &>/dev/null ) && GO_VERSION=$($GOROOT/bin/go version 2>&1 | awk '{print $3}' | tr -d go) || unset GO_VERSION
+
 GOROOT=${GOROOT:-$WORKSPACE/lib/.go-$GO_VERSION}
 [ -d $GOROOT ] && { ( echo $PATH | grep $GOROOT/bin &>/dev/null ) || PATH=$GOROOT/bin:$PATH; } || unset GOROOT
+
 GOPATH=${GOPATH:-$WORKSPACE/src/go-$GO_VERSION}
 [ -d $GOPATH ] && { (echo $PATH | grep $GOPATH/bin &>/dev/null ) || PATH=$GOPATH/bin:$PATH; } || unset GOPATH
 

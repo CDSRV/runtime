@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+tar.local () {
+    unset VERBOSE ## no 'quiet' option? ## TODO: declare local variable for local value in functions
+    [[ "$OUTPUT_STYLE" = "verbose" ]] && VERBOSE=v
+    OPTIONS="--acls --selinux --xattrs"
+    EXT=tar
+    FILE=${VOLUME}/${PREFIX_PATH}/${PREFIX_NAME}-${SOURCE}.${EXT}
+    [ -d ${VOLUME}/${PREFIX_PATH} ] || mkdir -p ${VOLUME}/${PREFIX_PATH}
+    [ -z $TEST ] || FILE=/dev/null
+    TARGET=$(basename $BASE_PATH)    
+    cd $BASE_PATH && cd ../
+        tar \
+        -c${VERBOSE}f $FILE \
+        --exclude-from=${EXCLUDE_FILE} \
+        $OPTIONS \
+        ${TARGET}
+     }
+

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+## REF: https://spack.readthedocs.io/en/latest/getting_started.html
+
+set -x
+: prerequisites
+
+PKG_TYPE=${PKG_TYPE:-yum}
+
+case $PKG_TYPE in
+	yum)
+	yum install -y epel-release
+
+	$PKG_TYPE install -y \
+	environment-modules \
+	file \
+	bzip2 \
+	autoconf \
+	automake \
+	m4 \
+	bison \
+	flex \
+	libtool \
+	strace \
+	make \
+	patch \
+	gcc \
+	gcc-c++ \
+	cpp \
+	libdb \
+	libdb-devel \
+	libdb-utils \
+	syslinux \
+	;;
+	*)
+	: not implemented yet
+	;;
+esac ## PKG_TYPE
+
+SPACK_ROOT=/lib/spack
+
+[ -d $SPACK_ROOT ] && [ -w $SPACK_ROOT ] || SPACK_ROOT=${WORKSPACE}/lib/spack
+
+
+SPACK_ROOT=${SPACK_ROOT:?required}
+
+cd $(dirname $SPACK_ROOT)
+
+[ -d $SPACK_ROOT ] || git clone --depth 1  https://github.com/spack/spack.git
+
+cd $SPACK_ROOT
+
+[ -d .git ]  ||  { : OOPS - spack directory exists but is not a git repo; exit 1; }
+
+git pull
+git status
+
+#SPACK_PYTHON=
+

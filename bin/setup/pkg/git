@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+##
+## REF: https://git-scm.com/docs/git-config
+
+# optional
+# [[ "${BASH_SOURCE[0]}" != "${0}" ]] || { echo "ERROR: this file must be sourced from bash"; exit 1; }
+
+[ "$EUID" = 0 ] || SUDO="sudo -EH" SCOPE="global"
+
+[ "$EUID" = 0 ] && SCOPE="system"
+
+PKG_TYPE=${PKG_TYPE:-yum}
+INSTALL="install -y"
+## TODO: use < ${PKG_TYPE}-package.list
+$SUDO $PKG_TYPE $INSTALL git git-subtree
+git config --list
+
+set -a
+GIT_VERSION=$(git --version 2>&1 | awk '{print $3}')
+GIT_SCOPE=${SCOPE}
+set +a
+
+echo "## DONE : git setup"
+env | grep ^GIT
+
+## END 

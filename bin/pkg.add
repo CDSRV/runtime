@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 
-## adds OS packages from a list or stdin
+case_debug
+## adds packages from a list or stdin
 
 PKG_TYPE=${PKG_TYPE:?required} 
+
+##TODO: options
 
 case $PKG_TYPE in
 	apt)
 	apt-get install -y "$@"
 	;;
-	yum)	
-	yum install -y "$@"
+	yum|dnf)	
+	dnf install -y "$@"
 	;;
-
+    ##TODO: python, npm, etc
 esac

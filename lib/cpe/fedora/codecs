@@ -1,0 +1,4 @@
+dnf install -y libdvdcss x264 x264-libs
+
+dnf install -y gstreamer1-plugins-*
+dnf install -y vlc

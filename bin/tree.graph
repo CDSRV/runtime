@@ -1,0 +1,83 @@
+#!/bin/bash
+
+## https://lists.fedoraproject.org/pipermail/users/2010-March/367807.html
+## https://renenyffenegger.ch/notes/tools/Graphviz/examples/index
+## https://stackoverflow.com/questions/4210042/how-to-exclude-a-directory-in-find-command
+
+case_debug 
+
+TARGET=${TARGET:-${1%.*}}
+TARGET=${TARGET:-.}
+[ $TARGET = "." ] && TARGET=$(basename $(pwd)) && cd ../
+#[ $TARGET = "./" ] && TARGET=$(basename $(pwd)) && cd ../
+
+
+DOTFILE_NAME=${DOTFILE_NAME:-tree.dot} # or .tree.dot-$BRANCH
+
+
+#EXCLUDE_DIR=${EXCLUDE_DIR:-.git} ## TODO: array
+
+#EXCLUDE_LIST=${EXCLUDE_LIST:?required}
+EXCLUDE_LIST=${EXCLUDE_LIST:-$(cd $TARGET; pwd)/.graph.exclude.list}
+[ -a $EXCLUDE_LIST ] || exit 1 # unset EXCLUDE_LIST
+
+###
+###
+###
+
+
+function label () {
+LABEL=$(basename $DIR)
+LABEL=${LABEL#./}
+DIR=${DIR#./}
+[ $ROOT = "." ] && ROOT=$(basename $(pwd)) 
+	echo "\"${ROOT#./}\" -> \"$DIR\";" >> $DOTFILE
+	echo "\"$DIR\" [label=\"$LABEL\"];" >> $DOTFILE
+
+}
+
+function exclude () {
+[[ -a $EXCLUDE_LIST ]] &&  grep -v -f ${EXCLUDE_LIST} || true
+}
+
+## TODO: test with spaces / special characters
+function recurse () {
+
+	SUBS=$(find ${1} -mindepth 1 -maxdepth 1 -type d | exclude )
+
+	for DIR in $SUBS
+	do
+	ROOT=$1
+		label
+		recurse $DIR
+	done
+}
+
+###############################################################################
+##
+
+GRAPH=$(basename $TARGET)
+
+DOTFILE=${DOTFILE:-${DOTFILE_PREFIX}$DOTFILE_NAME}
+touch $DOTFILE || exit 1
+#exit
+
+## generate
+$PRINT "PROCESSING: "$(pwd)/$TARGET
+export IFS=$'\n'
+echo "digraph $GRAPH {" > $DOTFILE
+echo "rankdir=LR;" >> $DOTFILE
+echo "graph [fontname = "helvetica"];" >> $DOTFILE
+echo "node [shape=record];" >> $DOTFILE
+recurse $TARGET
+echo "}" >> $DOTFILE
+
+## convert
+set -e
+## should be one level above
+FORMAT=svg
+OUTFILE=${TARGET}/tree.$FORMAT
+dot -T${FORMAT} $DOTFILE > ${OUTFILE}
+mv $DOTFILE ${TARGET}/
+#eog $OUTFILE &
+

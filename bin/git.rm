@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
 
-git rm --cached $1
-rm $1
+REMOVE=$1
+[ -z $REMOVE ] && exit 3
+[[ "$REMOVE" = "/" ]] && exit 9
+[[ "$REMOVE" = ".git" ]] && exit 9
+
+git rm -r --cached $REMOVE
+rm -rf $REMOVE

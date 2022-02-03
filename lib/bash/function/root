@@ -1,0 +1,13 @@
+## use one or the other
+
+case_root () {
+[ "$EUID" = 0 ] && { SCOPE="system"; unset SUDO; }
+[ "$EUID" = 0 ] || { SUDO="sudo -EH"; SCOPE="local"; }
+}
+
+require_root () {
+[[ "$EUID" = "0" ]] || { echo "ERROR: root privileges required"; return 1; }
+SCOPE="system"
+unset SUDO
+}
+

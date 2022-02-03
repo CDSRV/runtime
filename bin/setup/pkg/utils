@@ -1,0 +1,3 @@
+yum install -y srm scrub photorec zulucrypt zulucrypt-doc
+
+yum install -y vnstat iftop nmon dstat

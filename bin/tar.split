@@ -1,0 +1,12 @@
+
+## PURPOSE: span multiple volumes
+## REF: https://www.gnu.org/software/tar/manual/html_node/Multi_002dVolume-Archives.html
+
+set -x
+
+SOURCE=${SOURCE:?required}
+DEST=${DEST:-./$(basename $SOURCE)}
+SIZE=${SIZE:-1G}
+FILE="${DEST}.tar-"
+
+tar -v --create -f - $SOURCE | split --bytes=$SIZE - $FILE

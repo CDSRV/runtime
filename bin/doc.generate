@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+## PURPOSE: generate documentation for current PROJECT
+
+case_debug
+
+WORKSPACE=${WORKSPACE:?required}
+OUTPUT_PATH=${OUTPUT_PATH:-${WORKSPACE}/doc}
+
+cd $WORKSPACE
+
+## graphviz dot format
+tree.graph
+mv tree.svg $OUTPUT_PATH/$PROJECT-tree.svg
+mv tree.dot $OUTPUT_PATH/$PROJECT-tree.dot
+
+## tree command
+tree -JI .git > $OUTPUT_PATH/$PROJECT-tree.json
+tree -H "." -T $PROJECT -I .git > index.html

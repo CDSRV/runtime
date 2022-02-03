@@ -1,0 +1,38 @@
+PKG_TYPE=yum
+
+PKG_LIST="
+curl
+unzip
+scap-security-guide
+openscap-utils
+openscap
+openscap-engine-sce
+"
+
+$PKG_TYPE install -y $PKG_LIST
+
+## oscap info --fetch-remote-resources /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml --fetch-remote-resources
+
+
+## oscap xccdf generate fix --profile ospp /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml > fix.sh
+
+curl -o com.redhat.rhsa-all.xccdf.xml https://www.redhat.com/security/data/metrics/com.redhat.rhsa-all.xccdf.xml
+curl -o com.redhat.rhsa-all.xml https://www.redhat.com/security/data/oval/com.redhat.rhsa-all.xml
+curl -o U_RHEL_8_V1R3_STIG.zip https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_8_V1R3_STIG.zip
+unzip U_RHEL_8_V1R3_STIG.zip
+
+oscap info U_RHEL_8_V1R3_Manual_STIG/U_RHEL_8_STIG_V1R3_Manual-xccdf.xml
+oscap xccdf eval \
+--profile MAC-3_Classified \
+--results-arf results.xml \
+--report report.html \
+U_RHEL_8_V1R3_Manual_STIG/U_RHEL_8_STIG_V1R3_Manual-xccdf.xml
+
+# oscap xccdf eval --results results.xml --report report.html com.redhat.rhsa-all.xccdf.xml
+
+# oscap xccdf eval --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_cis --cpe /usr/share/xml/scap/ssg/content/ssg-rhel8-cpe-dictionary.xml --results-arf arf.xml --report report.html --oval-results /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+
+
+
+## CENTOS
+#dnf config-manager --set-enabled powertools

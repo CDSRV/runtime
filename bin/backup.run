@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+
+## PURPOSE: runs the backup
+
+set -e
+
+case_debug
+
+OUTPUT_STYLE=${OUTPUT_STYLE:-quiet}
+
+$PRINT "======================"
+
+$PRINT "START=$(log_time)"
+
+$PRINT $(uname -a)
+
+WORKSPACE=${WORKSPACE:-/}
+BACKUP_CONFIG=${BACKUP_CONFIG:-$RUNTIME/etc/backup}
+
+$PRINT CHECKING CONFIG
+[ -a $BACKUP_CONFIG ] || { $PRINT ERROR - accessing BACKUP_CONFIG : $BACKUP_CONFIG; exit 1; }
+
+
+## TEST=true ##
+case $TEST in
+    1|True|true)
+    TEST=n
+    ;;
+    *)
+    unset TEST
+    ;;
+esac #TEST
+
+
+
+
+
+process.source () {
+    $PRINT "======================"
+
+    $PRINT SOURCE=$SOURCE
+
+    . $BACKUP_CONFIG/target/source/$SOURCE.properties
+     
+    POLICY=${POLICY:?required} ## set options for method
+    $PRINT POLICY=$POLICY
+   
+    BASE_PATH=${BASE_PATH:?required}
+    $PRINT BASE_PATH=$BASE_PATH
+ 
+    INCLUDE_FILE=$BACKUP_CONFIG/target/source/$SOURCE.include
+
+    EXCLUDE_FILE=$BACKUP_CONFIG/target/source/$SOURCE.exclude
+
+    DESTINATION=${DESTINATION:-default}
+}
+
+process.destination () {
+  $PRINT DESTINATION: 
+    while read VOLUME
+    do
+
+        LOG_PATH=$WORKSPACE/var/log/runtime/backup
+        [ -d $LOG_PATH ] || mkdir -p $LOG_PATH 
+
+        LOG="${LOG_PATH}/$(today)-$(now)-$SOURCE.log"
+        
+        $PRINT $VOLUME         
+
+        #( lsblk -o name,mountpoint,label,size,uuid | grep $VOLUME ) || { $PRINT ERROR; exit 1; }
+        
+        . $BACKUP_CONFIG/target/destination/$DESTINATION.properties
+
+        $PRINT METHOD=$METHOD.$DESTINATION_TYPE
+     
+        $PRINT starting backup $SOURCE: $METHOD.$DESTINATION_TYPE @ $LOG
+
+        ## TODO: log header / footer
+
+        [[ "$OUTPUT_STYLE" = "quiet" ]] && $METHOD.$DESTINATION_TYPE &>>$LOG
+
+        [[ "$OUTPUT_STYLE" = "verbose" ]] && $METHOD.$DESTINATION_TYPE |& tee -a $LOG
+
+    done <  $BACKUP_CONFIG/target/destination/$DESTINATION.volumes
+}
+
+
+process.input () {
+## check if input is a SOURCE or SCHEDULE name or full path
+[ -e $BACKUP_CONFIG/target/source/$INPUT.properties ] && { PLAN=one && SOURCE=$INPUT; }
+[ -e $BACKUP_CONFIG/target/source/$(basename $INPUT) ] && { PLAN=one && SOURCE=$(basename $INPUT) && SOURCE=${SOURCE%%.properties}; } 
+[ -e $BACKUP_CONFIG/schedule/$INPUT ] && { PLAN=schedule && SCHEDULE=$INPUT; }
+[ -e $BACKUP_CONFIG/schedule/$(basename $INPUT) ] && { PLAN=schedule && SCHEDULE=$INPUT; }
+}
+
+$PRINT SOURCES:
+
+INPUT=$1
+[ -z "${INPUT}" ] || process.input
+[ -z "${INPUT}" ] && SCHEDULE=${SCHEDULE:-default} # if SCHEDULE is set, ignore input
+[ -z "$SCHEDULE" ] || PLAN=schedule
+
+case $PLAN in
+    ## as specified
+    one)
+        process.source
+        process.destination
+    ;;
+
+    schedule)
+    $PRINT "SCHEDULE="$SCHEDULE
+    while read SOURCE
+    do
+        process.source
+        process.destination
+    done < $BACKUP_CONFIG/schedule/$SCHEDULE
+    ;;
+
+    *)
+    $PRINT ERROR - could not find source profile or schedule "'"$INPUT"'"
+    ;;
+
+esac #PLAN
+
+$PRINT $(log_time) $0 $SOURCE $SCHEDULE
+
+

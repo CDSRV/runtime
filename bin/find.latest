@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+## PURPOSE: find by last modified time
+# - squash permission errors
+
+FIND_CMD="/usr/bin/find"
+
+FIND_PATH=${FIND_PATH:-.}
+
+TIME_RANGE=${TIME_RANGE:-$1}
+[ -z $TIME_RANGE ] && TIME_RANGE=1
+
+TIME_SCALE=${TIME_SCALE:-days}
+
+case $TIME_SCALE in
+    days)
+    scale=360
+    MMIN=$(($TIME_RANGE * $scale))
+    RANGE=-mmin -${MMIN}
+    ;;
+    minutes)
+    scale=1
+    MMIN=$(($TIME_RANGE * $scale))
+    RANGE=-mmin -${MMIN}
+    ;;
+esac #TIME_SCALE
+
+$FIND_CMD $FIND_PATH $RANGE 2>/dev/null
+
+## 
+
+FIND_CMD .   2>/dev/null

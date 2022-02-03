@@ -1,1 +1,2 @@
-docker rm ${PROJECT}.$(branch)
+CONTAINER=${1:-${PROJECT}.$(branch)}
+docker rm ${CONTAINER}

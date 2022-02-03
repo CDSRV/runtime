@@ -1,0 +1,3 @@
+#curl -sfL https://get.k3s.io | sh -
+docker pull rancher/k3s:latest
+

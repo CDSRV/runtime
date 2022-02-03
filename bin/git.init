@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+GIT_DEFAULT_BRANCH=${GIT_DEFAULT_BRANCH:-default}
+
+## new repo
+git init
+git checkout -b $GIT_DEFAULT_BRANCH
+

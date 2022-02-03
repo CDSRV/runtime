@@ -1,0 +1,1 @@
+alias du='du -sh "${@}" 2>/dev/null'

@@ -1,0 +1,2 @@
+## REF: https://fedoraproject.org/wiki/Changes/SwapOnZRAM
+dnf remove -y zram-generator-defaults

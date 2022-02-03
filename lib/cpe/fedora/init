@@ -1,0 +1,12 @@
+$PRINT START: $(log_time)
+$PRINT CPE: $CPE
+
+set -xe
+. ./zram
+. ./dnf
+. ./rpmfusion
+. ./codecs
+set +xe
+
+$PRINT DONE: $(log_time)
+

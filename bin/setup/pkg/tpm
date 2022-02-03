@@ -1,0 +1,5 @@
+yum install -y p11-kit-*
+yum install -y tpm-*
+yum install -y tpm2-*
+yum install -y trousers-* 
+

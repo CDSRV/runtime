@@ -1,7 +1,16 @@
-## determine linux environment / distro
-yum --version &>/dev/null && export PKG_TYPE=yum
-apt --version &>/dev/null && export PKG_TYPE=apt
-apk --version &>/dev/null && export PKG_TYPE=apk
+## TODO: function os.pkg.type
+## OS packaging type
+type yum &>/dev/null && export PKG_TYPE=yum
+type dnf &>/dev/null && export PKG_TYPE=dnf
+type apt &>/dev/null && export PKG_TYPE=apt
+type apk &>/dev/null && export PKG_TYPE=apk
 
+
+## don't import /etc/os-release unless+until necessary
+## due to scope of NAME variable
+
+## platform type
 OS="$(uname -s)"
 ARCH="$(uname -m)"
+CPE=$(cat /etc/os-release | grep '^ID=' | tr -d 'ID=')
+
