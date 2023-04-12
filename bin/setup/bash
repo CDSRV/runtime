@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## PURPOSE: entrypoint for shell setup
+## PURPOSE: entrypoint for BASH setup
 
 [ "$(basename $(readlink /proc/$$/exe))" = zsh ] && { echo "ERROR: zsh not supported, please use bash"; return 1; }
 
@@ -45,14 +45,12 @@ echo "RUNTIME=$RUNTIME"
 
 echo "# ... loading"
 
-[ -z $DEBUG ] || set -o xtrace
-
 ## initial workspace
 export WORKSPACE=${RUNTIME}
 
 ## NOTE: load & call workspace function to load current runtime environment
 
-. ${WORKSPACE}/lib/bash/function/workspace
+. ${WORKSPACE}/lib/shell/bash/function/workspace
 
 cd ${WORKSPACE}
 workspace

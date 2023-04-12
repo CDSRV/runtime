@@ -5,5 +5,15 @@ REMOVE=$1
 [[ "$REMOVE" = "/" ]] && exit 9
 [[ "$REMOVE" = ".git" ]] && exit 9
 
-git rm -r --cached $REMOVE
+git filter-branch -f --index-filter "git rm -r --cached --ignore-unmatch $REMOVE" -- --all
+
+git reflog expire --expire=now --all
+git gc --prune=now
+git gc --aggressive --prune=now
+
+## 
+GIT_PUSH_OPTIONS="--all --force"
+read PUSH
+git push $GIT_PUSH_OPTIONS
+
 rm -rf $REMOVE

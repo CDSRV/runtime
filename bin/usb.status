@@ -1,0 +1,3 @@
+## PURPOSE: monitor usb device connection graph
+: ${LOOP_DELAY:=10}
+loop "lsusb -t 2>&1 | tee >(wc -l)" $LOOP_DELAY

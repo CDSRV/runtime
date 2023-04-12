@@ -3,4 +3,4 @@
 LENGTH=${1:-32}
 COUNT=${COUNT:-${LENGTH}}
 
-apg -a 1 -M NCL -n $COUNT -m $LENGTH -c cl_seed
+apg -a 1 -M SNCL -n $COUNT -m $LENGTH -c cl_seed

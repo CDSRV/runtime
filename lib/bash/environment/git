@@ -1,6 +1,0 @@
-VCS=git
-GIT_SSH_COMMAND="ssh -v"
-GIT_STATUS_OPTIONS="-vvsb"
-GIT_SHOW_IGNORED="no"
-GIT_DEFAULT_BRANCH="default"
-## other directives with git config

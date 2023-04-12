@@ -1,0 +1,58 @@
+###!/usr/bin/env bash
+
+## REF: https://github.com/CDSRV/runtime
+
+## STATUS: experimental
+## REF: https://stackoverflow.com/questions/1585989/how-to-parse-proc-pid-cmdline
+
+## PURPOSE: 
+## - example command handler for building abstraction/indirection frameworks
+## - provides a way to have multiple commands pointing to the same file
+## - target script parses commandline to determine what action to run
+## - enable code re-use by keeping related options in one file
+
+
+## NOTE: this skips loading debug logic if framework functions are not available
+[ -z $RUNTIME ] || case_debug ## output formatting functions
+
+## NOTE: This hacky method utilizes links to the same file to define different commands
+## REF: https://github.com/torvalds/linux/blob/master/fs/proc/cmdline.c
+##
+## NOTE: requires/enables a calling script
+
+## EXAMPLE: entrypoint file "action.example"
+## #!/usr/bin/env bash
+## case.action $@
+
+## EXAMPLE: usage
+## action.example.this ARGS  # calls case.action which matches on ".this*"
+## action.example ARGS  # calls case.action which matches on "*"
+
+
+## NOTE: this file is 'case.action'
+ACTION=$(basename $(tr -d '\0' < /proc/$PPID/cmdline)) &>/dev/null
+
+## NOTE: include common code for all actions here
+
+echo ACTION=$ACTION
+
+## NOTE: define action specific functions here
+## NOTE: action is defined by the FILENAME of the caller
+
+case $ACTION in
+
+	*.this* | *.that* ) ## action.example.this* | action.example.that*
+	: $ACTION
+	echo "doing this or that"
+	echo OPTIONS=$@
+	;;
+	
+	*)
+	## NOTE: default action
+	: $ACTION
+	: type $0
+	echo "default action"
+	echo OPTIONS=$@
+	;;
+esac
+

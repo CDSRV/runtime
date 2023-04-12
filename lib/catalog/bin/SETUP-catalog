@@ -1,0 +1,64 @@
+#!/bin/bash
+
+
+#X=`dirname $_`
+#echo "X="$X
+
+echo "##< SETTING UP PATHS"
+
+X=`pwd`
+
+BIN=$X/bin;export BIN
+CONF=$X/conf;export CONF
+TOPICS=$X/TOPICS;export TOPICS
+PATH=$PATH:$X;export PATH
+
+SEARCH_PATHS=$CONF/SEARCH-paths
+for P in $SEARCH_PATHS;do
+echo "##< SEARCHING :" $P
+([ -d $P ] && echo "##< CANT ACCESS SOURCE :" $P)&& exit
+done
+
+##>FUNCTIONS
+
+echo "##< SETTING UP FUNCTIONS"
+
+emit.start () {
+echo "##< `id -un`@$HOSTNAME : $0 : START : `date +%Y%M-%d%m` " 
+}
+
+emit.done () {
+echo "##< `id -un`@$HOSTNAME : $0 : DONE : `date +%Y%M-%d%m` " 
+}
+
+check.keywords () {
+[ ! -s $TOPICS/$T/KEYWORDS* ] && ( echo "##< NO KEYWORDS FOR TOPIC : $T"; echo "##< TRY ADDING THEM TO $TOPICS/$T/KEYWORDS-$T"; touch $TOPICS/$T/KEYWORDS-$T )
+}
+
+check.topics () {
+([ ! -s $CONF/TOPIC-list ] && echo "##< NO TOPICS : PLEASE ADD THEM TO $CONF/TOPIC-list")&& exit
+}
+
+##> FUNCTIONS
+
+
+##> TOPICS
+check.topics
+
+for T in `cat $CONF/TOPIC-list`;do
+
+[ ! -d $TOPICS/$T ] && (echo "## CREATING TOPIC DIRECTORY :" $T; mkdir $TOPICS/$T)
+
+##> KEYWORDS
+check.keywords
+
+done
+##>TOPICS
+
+#([ ! -d $DESTINATION ] && echo "##< CANT ACCESS DESTINATION :" $DESTINATION)&& exit
+
+
+
+##> SETUP
+CATALOG_SETUP=OK;export CATALOG_SETUP
+echo "##< CATALOG SETUP :" $CATALOG_SETUP

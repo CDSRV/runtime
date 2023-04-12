@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -x
+
+## DEFAULT VALUES
+
+: one way
+: ${KEY1:="value"}
+: ${DEBUG1:="false"}
+: ${REQUIRED:?required}
+
+: another way
+KEY2=${KEY2:-value}
+DEBUG2=${DEBUG:-value}
+
+: KEY1=$KEY1
+: KEY2=$KEY2
+
+
+: DEBUG1=$DEBUG1
+: DEBUG2=$DEBUG2
+

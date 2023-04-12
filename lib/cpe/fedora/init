@@ -2,10 +2,15 @@ $PRINT START: $(log_time)
 $PRINT CPE: $CPE
 
 set -xe
+dnf update -y
+PATH=$RUNTIME/bin/setup/pkg:$PATH
+etckeeper
 . ./zram
 . ./dnf
 . ./rpmfusion
 . ./codecs
+c
+python
 set +xe
 
 $PRINT DONE: $(log_time)

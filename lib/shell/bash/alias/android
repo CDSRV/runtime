@@ -1,0 +1,8 @@
+## PROBLEM:
+#Error: Could not determine SDK root.
+#Error: Either specify it explicitly with --sdk_root= or move this package into its expected location: <sdk>/cmdline-tools/latest/
+
+## SOLUTION?
+#alias sdkmanager='sdkmanager --sdk-root=$ANDROID_SDK_ROOT'
+## Error: Unknown argument "--sdk-root=~/src/dl.google.com/dl/android"
+

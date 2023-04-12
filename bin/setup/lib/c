@@ -23,6 +23,7 @@ set -a
 gcc --version &>/dev/null || $SUDO $PKG_TYPE install -y gcc
 GCC_VERSION="$(gcc --version | head -1 | awk '{print $3}')"
 
+type xtrace || $SUDO $PKG_TYPE install -y glibc-utils 
 
 ## package name is not the executable name
 

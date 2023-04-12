@@ -1,0 +1,6 @@
+## provider status
+for $PROVIDER in $PROVIDERS/*
+	do
+	$PROVIDERS/$PROVIDER/bin/status
+done
+

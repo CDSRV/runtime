@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+## REF: https://streamripper.sourceforge.net/
+## PURPOSE: convenience wrapper for streamripper
+
+CMD=streamripper
+
+[ -z $DEBUG ] || DEBUG_LOG="--debug"
+
+[ -z $URL ] && [ -a .url ] && URL=$(<.url)
+
+URL=${URL:?required}
+UA=${UA:-UA}
+
+DST_DIR=${DIST_DIR:-.}
+
+PORT=8000
+
+STREAMRIPPER_OPTIONS="-tT -u $UA -r $PORT -d $DST_DIR $DEBUG_LOG"
+
+$CMD $URL $STREAMRIPPER_OPTIONS 

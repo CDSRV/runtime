@@ -1,3 +1,0 @@
-require_interactive () {
-[ -z "$PS1" ] && { echo "ERROR: interactive shell required"; return 1; }
-}

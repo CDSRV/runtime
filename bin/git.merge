@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+[ -z $DEBUG ] || set -x
+
+## set -e
+
+## if BRANCH_UPSTREAM
+MERGE_SRC=${MERGE_SRC:-$(branch)} ## merge source, default to current branch
+MERGE_DST=${MERGE_DST:-$GIT_DEFAULT_BRANCH} ## merge destination
+
+
+## rebase
+git checkout $MERGE_DST
+git fetch
+git pull
+
+git checkout $MERGE_SRC
+git rebase $MERGE_DST
+
+git checkout $MERGE_DST
+git merge $MERGE_SRC
+

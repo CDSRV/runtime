@@ -1,0 +1,2 @@
+alias reload='workspace reload'
+alias runtime.reload='workspace reload'

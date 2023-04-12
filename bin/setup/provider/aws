@@ -6,7 +6,7 @@
 
 ## adding these as PIP packages for easy updates
 
-pip.install awscli awsebcli aws-shell aws-sam-cli
+pip.install awscli aws-shell # aws-sam-cli awsebcli
 
 ( type npm &>/dev/null ) || $RUNTIME/bin/setup/pkg/nodejs
 

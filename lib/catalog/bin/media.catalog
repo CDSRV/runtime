@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+[ -z $DEBUG ] || set -x
+
+## PURPOSE: add media to the catalog
+
+CATALOG_HOME=${CATALOG_HOME:-$PWD}
+
+CATALOG="${CATALOG_HOME}/CATALOG"
+
+[ -a $CATALOG ] || { : ... no catalog; exit 1; }
+
+cd $CATALOG || { : ... oops; exit 1; }
+
+## show only disks
+MOUNTS=$(mount | grep -v cgroups)
+
+for VOLUME in VOLUME/UUID/*
+do
+VOLUME_NAME=${VOLUME##*/}
+ls -la /run/media/$LOGNAME/$VOLUME_NAME
+mount | grep "${VOLUME_NAME}"
+done

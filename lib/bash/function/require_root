@@ -1,3 +1,0 @@
-require_root () {
-[[ "$EUID" = "0" ]] || { echo "ERROR: root privileges required"; return 1; }
-}

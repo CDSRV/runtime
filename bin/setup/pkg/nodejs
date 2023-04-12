@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
+set -e
+
 ## REF: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 ## REF: https://github.com/nodesource/distributions
 ## REF: https://github.com/nodejs/help/wiki/Installation
 
+: ${WORKSPACE:?required}
 
 case_debug
 
@@ -52,6 +55,7 @@ wget $WGET_OPTIONS https://$NODEJS_REPO/$NODEJS_VERSION/$NODEJS_PKG
 cd $WORKSPACE/lib/nodejs/$NODEJS_REPO/$NODEJS_VERSION/
 
 : verify PKG
+## perl-Digest-SHA
 shasum -c --ignore-missing SHASUMS256.txt
 
 : unpack archive
@@ -77,3 +81,4 @@ ${NODEJS_HOME}/bin/node --version
 
 : 
 tree -L 5 $WORKSPACE/lib/nodejs
+

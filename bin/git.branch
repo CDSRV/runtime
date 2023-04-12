@@ -26,6 +26,9 @@ BRANCH="$1"
 ## REF: https://stackoverflow.com/questions/5167957/is-there-a-better-way-to-find-out-if-a-local-git-branch-exists
 git show-ref refs/heads/"${BRANCH}" &>/dev/null || git checkout -b $BRANCH
 
+## check the remotes before creating new local branch
+git branch --remote | grep "${BRANCH}" &>/dev/null || git checkout -b $BRANCH
+
 ## REF: https://devconnected.com/how-to-switch-branch-on-git/
 [ "${BRANCH}" = "$(git symbolic-ref --short HEAD)" ] || git checkout "${BRANCH}"
 

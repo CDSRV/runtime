@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+
+## PURPOSE: copy files from bulk storage to smaller sized media
+
+## REF: https://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html#cp-invocation
+
+set -x
+#set -e
+set -o pipefail
+
+
+BASE=$(pwd)
+
+CATALOG_HOME=${CATALOG_HOME:-$PWD}
+
+CATALOG="${CATALOG_HOME}/CATALOG"
+
+[ -a $CATALOG ] || { : ... no catalog; exit 1; }
+
+cd $CATALOG || { : ... oops; exit 1; }
+
+SRC=${SRC:?required}
+SRC_PREFIX=$(dirname "${SRC}")
+SRC_NAME=$(basename "${SRC}")
+
+
+
+
+### FUNCTIONS
+
+## for DEST_VOLUME
+
+## show only disks
+MOUNTS=$(mount | grep -v cgroups) ## etc
+
+## DEST from stdin
+while read line
+do
+echo VOLUME_NAME=${VOLUME##*/}
+done
+
+
+
+
+ls -la /run/media/$LOGNAME/$VOLUME_NAME
+mount | grep "${VOLUME_NAME}"
+
+DEST="/run/media/${LOGNAME}/${VOLUME_NAME}"
+DEST=${DEST:?required}
+DEST_PREFIX=$(dirname "${DEST}")
+DEST_NAME=$(basename "${DEST}")
+
+: FREE=$(free)
+
+LOG_DIR=$VOLUME
+## SRC_INDEX
+INDEX_LIST=${LOG_DIR}/${SRC_NAME}-index.list
+cat /dev/null > $INDEX_LIST.raw
+# RUN/file-log
+LOG=${LOG_DIR}/${DEST_NAME}-copy.log
+cat /dev/null > $LOG
+
+## DEST_INDEX
+
+
+## create index of source
+cd "${SRC_PREFIX}"
+find ${SRC_NAME} -type f &>${INDEX_LIST}.raw
+sort -i ${INDEX_LIST}.raw > ${INDEX_LIST}
+
+INDEX_TOTAL=$(wc -l $INDEX_LIST | awk '{print $1}')
+
+
+
+## while DEST_VOLUME
+INDEX=${INDEX:-$INDEX_TOTAL}
+while [ "$(free)" -gt "32" ]
+do
+## increment file counter
+COUNT=$((COUNT+1))
+copy || break
+## if copy succeeds, decrement index counter
+INDEX=$((INDEX-1))
+done
+
+## create destination volume index
+# create_index
+
+## compare copy log with source index
+comm -13 $LOG $INDEX_LIST > ${LOG_DIR}/next-index
+
+## compare destination with source index
+#
+
+## else switch volumes
+
+df -h ${DEST}
+## done DEST_VOLUME
+done
+
+## report volumes and files
+## SRC=
+## SRC_NAME=
+## VOLUMES=

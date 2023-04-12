@@ -1,1 +1,3 @@
+#!/usr/bin/env bash
+
 df -hTt xfs | tail -n +2 | awk '{print $5,$7}'

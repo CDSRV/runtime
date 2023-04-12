@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+## always operates out of $CWD
+## only one VCS in use per directory
+
+VCS=${VCS:-git}
+$VCS.init

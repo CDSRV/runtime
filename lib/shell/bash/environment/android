@@ -1,0 +1,4 @@
+## REF: https://developer.android.com/studio/command-line/variables
+#ANDROID_HOME=
+ANDROID_SDK_ROOT=/home/cdsrv/Documents/CODE/UPSTREAM/src/dl.google.com/dl/android
+( echo $PATH | grep "${ANDROID_SDK_ROOT}" ) &>/dev/null || PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH

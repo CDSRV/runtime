@@ -41,5 +41,11 @@ LIB=${RUNTIME}/lib/cpe/$CPE
 [ -e "${LIB}" ] || { $PRINT ERROR: CPE library not found; exit 1; }
 
 cd $LIB
+set -a
+PATH=$RUNTIME/bin/setup/pkg:$PATH
 ## steps
 . ./init  # conflicts with 'init' top level cmd
+
+uname -a
+
+## END

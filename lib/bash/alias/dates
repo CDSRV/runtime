@@ -1,3 +1,0 @@
-## REF: http://man7.org/linux/man-pages/man1/date.1.html
-alias today="date --iso-8601=date"
-alias now="date +%H-%M-%S"

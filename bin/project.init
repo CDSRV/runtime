@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 
-VCS=${VCS:-git}
-$VCS.init
+## if no repo is active, create one
+vcs.status || init.vcs
+
+## initialize modules if needed
+infra.status || init.infra

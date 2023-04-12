@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+## TODO: alias workspace workspace.load
+
+workspace () {
+
+## PURPOSE: load and activate a workspace directory
+##
+## WORKSPACE
+## may contain:
+## 	- shell functions, aliases, environments
+## 	- CATALOG tree of source repos
+## 	- linux directory hierarchy
+## used for:
+## 	- root context for tools
+
+## separate debug variable for this function
+[ -z $WORKSPACE_DEBUG ] || set -o xtrace
+
+set -o allexport ## while loading parts
+
+set +e  ## otherwise the shell will exit
+
+
+## TODO: array variable WORKSPACE_LIST or WORKSPACES
+## TODO: workspace.list function
+WORKSPACE="$(pwd)"
+
+
+## TODO: case $1
+## restore clean PATH variable
+## reload modules if present
+[ "$1" = "reload" ] &&  echo "... reloading workspace $WORKSPACE" && . $HOME/.PATH.init && type module &>/dev/null && module reload
+## TODO: runtime.reload function or use WORKSPACE=$RUNTIME && workspace.reload
+
+## store initial value
+## TODO: store in catalog tree
+echo PATH=$PATH > $HOME/.PATH.init
+## or store in tmpfs or env ?
+
+## may fail if bin is a symlink - don't do that.
+[ -d $WORKSPACE/bin ] && ( echo $PATH | grep "${WORKSPACE}" &>/dev/null ) || PATH=$WORKSPACE/bin:$PATH
+
+
+##
+bash.source () {
+[ -a ${PARTS} ] || { echo "ERROR: accessing $PARTS"; return 1; }
+echo "LOADING: ${PARTS}"
+for lib in ${PARTS}/*
+do
+echo "##> $(basename $lib)"
+. $lib || echo "ERROR: processing $lib"
+done
+}
+
+## IN ORDER
+: FUNCTION
+local PARTS="${RUNTIME}/lib/shell/bash/function"
+bash.source
+
+: ALIAS
+local PARTS="${RUNTIME}/lib/shell/bash/alias"
+shopt -s expand_aliases
+bash.source
+
+: ENVIRONMENT
+local PARTS="${RUNTIME}/lib/shell/bash/environment"
+bash.source
+
+set +o allexport
+
+}
+
+## WORKSPACE
+
+## TODO: template catalog
+#workspace.init () {
+## PURPOSE: instantiate template directory structure
+# case $1 in $TEMPLATE
+#}
+
+## TODO: workspace.list function
+#workspace.list () {
+## PURPOSE: list available workspaces
+#}
+
+## TODO: quiet, brief and debug output
+workspace.status () {
+case_debug
+$PRINT "\
+RUNTIME=$RUNTIME
+WORKSPACE=$WORKSPACE
+CATALOG=$CATALOG
+NAME=$NAME
+###################
+$(vcs.status)"
+}

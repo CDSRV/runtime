@@ -1,0 +1,23 @@
+#!/bin/bash
+
+DESTINATION=./FILES-linked
+[ -d $DESTINATION ] || mkdir $DESTINATION
+
+## find paths with spaces in them
+(grep [[:space:]] *-files  &&  echo "## these need to be fixed before proceeding") && exit
+
+
+echo "##< no spaces found.. proceeding"
+
+
+## make the links
+## does not handle spaces 
+
+for FILE in `cat *-files`
+do
+echo "## PATH :" $FILE
+#echo "## FILE :" `basename "${FILE}"`
+#echo "## DIR  :" `dirname "${FILE}"`
+ln -s "$FILE" $DESTINATION/.
+done
+

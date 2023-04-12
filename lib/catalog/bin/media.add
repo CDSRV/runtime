@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+[ -z $DEBUG ] || set -x
+
+## PURPOSE: add media to the catalog
+
+CATALOG_HOME=${CATALOG_HOME:-$PWD}
+
+CATALOG="${CATALOG_HOME}/CATALOG"
+
+[ -a $CATALOG ] || { : ... no catalog; exit 1; }
+
+cd $CATALOG || { : ... oops; exit 1; }
+
+## PURPOSE: scan mounted volumes & create catalog entries
+## TODO: exclude system volumes
+
+VOLUME_PATH=${VOLUME_PATH:-/dev/disk/by-uuid}
+VOLUME_LIST=( "${VOLUME_PATH}/*" )
+echo $VOLUME_LIST
+exit
+
+for VOLUME in ${VOLUME_PATH}/*
+do
+VOLUME_NAME=${VOLUME##*/}
+[ -d VOLUME/UUID/$VOLUME_NAME ] || mkdir VOLUME/UUID/$VOLUME_NAME
+done
+
+## TODO: link name and uuid 
+VOLUME_PATH=${VOLUME_PATH:-/run/media/$LOGNAME}
+VOLUME_LIST=( ${VOLUME_PATH}/* )
+for VOLUME in ${VOLUME_PATH}/*
+do
+VOLUME_NAME=${VOLUME##*/}
+[ -d VOLUME/NAME/$VOLUME_NAME ] || mkdir VOLUME/NAME/$VOLUME_NAME
+done
+
+## TODO: scan catalog for mounted media
+

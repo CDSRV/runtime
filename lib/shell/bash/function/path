@@ -1,0 +1,8 @@
+## from BashNotes
+rpath(){
+for path in "$@";do
+PATH="$(echo "$PATH" |sed -e "s#\(^\|:\)$(echo "$path" |sed -e 's/[^^]/[&]/g' -e
+'s/\^/\\^/g')\(:\|/\{0,1\}$\)#\1\2#" -e 's#:\+#:#g' -e 's#^:\|:$##g')"
+done
+echo "$PATH"
+}

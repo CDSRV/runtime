@@ -1,0 +1,2 @@
+NODEJS_HOME=/home/cdsrv/Documents/CODE/LOCAL/runtime/lib/nodejs/nodejs.org/dist/latest/node-v17.4.0-linux-x64
+[ -d $NODEJS_HOME ] && {(echo $PATH | grep $NODEJS_HOME &>/dev/null) || PATH=${NODEJS_HOME}/bin:$PATH;} || unset NODEJS_HOME

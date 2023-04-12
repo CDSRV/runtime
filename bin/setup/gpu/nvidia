@@ -1,0 +1,9 @@
+dnf install kernel-devel-matched
+dnf install akmod-nvidia
+
+
+systemctl status akmods
+modinfo -F version nvidia
+
+
+## then update colorspace to sRGB ## open bug turns screen pink

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -x
+volumes () {
+## DEST from stdin
+while read VOLUME 
+do
+[ -z $VOLUME ] && return 128
+echo VOLUME_NAME=${VOLUME##*/}
+done
+}
+volumes || echo DONE

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-$CATALOG/android}
+
+[ touch $ANDROID_SDK_ROOT ] || midir -p $ANDROID_SDK_ROOT
+
+ANDROID_SDK_TOOLS_VERSION=7583922_latest
+ANDROID_SDK_TOOLS_URL=${ANDROID_SDK_TOOLS_URL:-https://dl.google.com/android/repository/commandlinetools-linux-$ANDROID_SDK_TOOLS_VERSION.zip}
+
+cd $ANDROID_SDK_ROOT
+mkdir latest && cd latest
+
+wget $ANDROID_SDK_TOOLS_URL
+unzip commandlinetools-linux-$ANDROID_SDK_TOOLS_VERSION.zip
+
+#ANDROID_STUDIO_VERSION=${ANDROID_STUDIO_VERSION:-2020.3.1.24}
+#ANDROID_STUDIO_URL=${ANDROID_STUDIO_URL:-https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2020.3.1.24/android-studio-$ANDROID_STUDIO_VERSION-linux.tar.gz}

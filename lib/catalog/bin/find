@@ -1,0 +1,56 @@
+#!/bin/bash
+
+([ -v $CATALOG_SETUP ] && echo "##< VARIABLES NOT SETUP.. ")&& exit
+
+emit.start
+
+echo "##< PROCESSING TOPICS"
+
+#T
+for T in `cat $CONF/TOPIC-list`;do
+echo "##< TOPIC :" $T
+
+if [ check.keywords ];then
+
+echo "##< PROCESSING SOURCES"
+
+#P
+for P in `cat $SEARCH_PATHS`;do
+echo "##< SEARCHING :" $P
+
+echo "##< PROCESSING KEYWORDS ON SOURCE :" $SOURCE
+
+#K
+for KEY in `cat $TOPICS/$T/KEYWORDS*`
+do
+
+echo "##< KEYWORD :" $KEY
+
+OUTFILE="$TOPICS/$T/$KEY-results.$RUN_DATE"
+
+echo "##< OUTPUT :" `basename $OUTFILE`
+
+echo "##< RUNNING FIND COMMAND - naaht!"
+## outputs paths only, but no escape sequences (spaces, etc)
+#find $SOURCE -iname "*${KEY}*" > $OUTFILE
+
+## outputs escape sequences but also 10 columns of garbage
+#find $SOURCE -iname "*${KEY}*" -fls $OUTFILE
+
+done #K
+
+echo "##< FILES_FOUND :" 
+#wc -l $DESTINATION/*
+
+done #P
+
+else
+echo "ELSE"
+fi
+
+
+done #T
+
+emit.done
+
+#
