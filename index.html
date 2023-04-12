@@ -3,56 +3,334 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <meta name="Author" content="Made by 'tree'">
- <meta name="GENERATOR" content="$Version: $ tree v1.8.0 (c) 1996 - 2018 by Steve Baker, Thomas Moore, Francesc Rocher, Florian Sesser, Kyosuke Tokoro $">
+ <meta name="GENERATOR" content="tree v2.1.0 © 1996 - 2022 by Steve Baker, Thomas Moore, Francesc Rocher, Florian Sesser, Kyosuke Tokoro">
  <title>runtime</title>
  <style type="text/css">
-  <!-- 
-  BODY { font-family : ariel, monospace, sans-serif; }
-  P { font-weight: normal; font-family : ariel, monospace, sans-serif; color: black; background-color: transparent;}
-  B { font-weight: normal; color: black; background-color: transparent;}
-  A:visited { font-weight : normal; text-decoration : none; background-color : transparent; margin : 0px 0px 0px 0px; padding : 0px 0px 0px 0px; display: inline; }
-  A:link    { font-weight : normal; text-decoration : none; margin : 0px 0px 0px 0px; padding : 0px 0px 0px 0px; display: inline; }
-  A:hover   { color : #000000; font-weight : normal; text-decoration : underline; background-color : yellow; margin : 0px 0px 0px 0px; padding : 0px 0px 0px 0px; display: inline; }
-  A:active  { color : #000000; font-weight: normal; background-color : transparent; margin : 0px 0px 0px 0px; padding : 0px 0px 0px 0px; display: inline; }
+  BODY { font-family : monospace, sans-serif;  color: black;}
+  P { font-family : monospace, sans-serif; color: black; margin:0px; padding: 0px;}
+  A:visited { text-decoration : none; margin : 0px; padding : 0px;}
+  A:link    { text-decoration : none; margin : 0px; padding : 0px;}
+  A:hover   { text-decoration: underline; background-color : yellow; margin : 0px; padding : 0px;}
+  A:active  { margin : 0px; padding : 0px;}
   .VERSION { font-size: small; font-family : arial, sans-serif; }
-  .NORM  { color: black;  background-color: transparent;}
-  .FIFO  { color: purple; background-color: transparent;}
-  .CHAR  { color: yellow; background-color: transparent;}
-  .DIR   { color: blue;   background-color: transparent;}
-  .BLOCK { color: yellow; background-color: transparent;}
-  .LINK  { color: aqua;   background-color: transparent;}
-  .SOCK  { color: fuchsia;background-color: transparent;}
-  .EXEC  { color: green;  background-color: transparent;}
-  -->
+  .NORM  { color: black;  }
+  .FIFO  { color: purple; }
+  .CHAR  { color: yellow; }
+  .DIR   { color: blue;   }
+  .BLOCK { color: yellow; }
+  .LINK  { color: aqua;   }
+  .SOCK  { color: fuchsia;}
+  .EXEC  { color: green;  }
  </style>
 </head>
 <body>
 	<h1>runtime</h1><p>
-	<a href=".">.</a><br>
+	<a href="./">.</a><br>
 	├── <a href="./bin/">bin</a><br>
+	│   ├── <a href="./bin/add">add</a><br>
+	│   ├── <a href="./bin/apg.binary">apg.binary</a><br>
+	│   ├── <a href="./bin/apg.strong">apg.strong</a><br>
+	│   ├── <a href="./bin/apg.uppercase">apg.uppercase</a><br>
+	│   ├── <a href="./bin/backup.configure.destination">backup.configure.destination</a><br>
+	│   ├── <a href="./bin/backup.configure.source">backup.configure.source</a><br>
+	│   ├── <a href="./bin/backup.run">backup.run</a><br>
+	│   ├── <a href="./bin/branch">branch</a><br>
+	│   ├── <a href="./bin/branch.delete">branch.delete</a><br>
+	│   ├── <a href="./bin/branch.empty">branch.empty</a><br>
+	│   ├── <a href="./bin/branch.list">branch.list</a><br>
+	│   ├── <a href="./bin/clean">clean</a><br>
+	│   ├── <a href="./bin/clone">clone</a><br>
+	│   ├── <a href="./bin/commit">commit</a><br>
+	│   ├── <a href="./bin/container.status">container.status</a><br>
+	│   ├── <a href="./bin/copy">copy</a><br>
+	│   ├── <a href="./bin/cpe.setup">cpe.setup</a><br>
+	│   ├── <a href="./bin/df.shm">df.shm</a><br>
+	│   ├── <a href="./bin/df.tmp">df.tmp</a><br>
+	│   ├── <a href="./bin/df.xfs">df.xfs</a><br>
+	│   ├── <a href="./bin/dif">dif</a><br>
+	│   ├── <a href="./bin/disk.security">disk.security</a><br>
+	│   ├── <a href="./bin/disk.status">disk.status</a><br>
+	│   ├── <a href="./bin/doc.generate">doc.generate</a><br>
+	│   ├── <a href="./bin/docker.build">docker.build</a><br>
+	│   ├── <a href="./bin/docker.login">docker.login</a><br>
+	│   ├── <a href="./bin/docker.ps">docker.ps</a><br>
+	│   ├── <a href="./bin/docker.rm">docker.rm</a><br>
+	│   ├── <a href="./bin/docker.run">docker.run</a><br>
+	│   ├── <a href="./bin/dug">dug</a><br>
+	│   ├── <a href="./bin/entropy">entropy</a><br>
+	│   ├── <a href="./bin/experimental/">experimental</a><br>
+	│   │   ├── <a href="./bin/experimental/action.example">action.example</a><br>
+	│   │   ├── <a href="./bin/experimental/action.example.that">action.example.that</a><br>
+	│   │   ├── <a href="./bin/experimental/action.example.this">action.example.this</a><br>
+	│   │   ├── <a href="./bin/experimental/case.action">case.action</a><br>
+	│   │   └── <a href="./bin/experimental/variable-declarations">variable-declarations</a><br>
+	│   ├── <a href="./bin/find.latest">find.latest</a><br>
+	│   ├── <a href="./bin/git.add">git.add</a><br>
+	│   ├── <a href="./bin/git.amend">git.amend</a><br>
+	│   ├── <a href="./bin/git.branch">git.branch</a><br>
+	│   ├── <a href="./bin/git.branch.delete">git.branch.delete</a><br>
+	│   ├── <a href="./bin/git.branch.empty">git.branch.empty</a><br>
+	│   ├── <a href="./bin/git.branch.list">git.branch.list</a><br>
+	│   ├── <a href="./bin/git.clean">git.clean</a><br>
+	│   ├── <a href="./bin/git.commit">git.commit</a><br>
+	│   ├── <a href="./bin/git.config">git.config</a><br>
+	│   ├── <a href="./bin/git.diff">git.diff</a><br>
+	│   ├── <a href="./bin/git.fetch">git.fetch</a><br>
+	│   ├── <a href="./bin/git.init">git.init</a><br>
+	│   ├── <a href="./bin/git.log">git.log</a><br>
+	│   ├── <a href="./bin/git.merge">git.merge</a><br>
+	│   ├── <a href="./bin/git.pull">git.pull</a><br>
+	│   ├── <a href="./bin/git.push">git.push</a><br>
+	│   ├── <a href="./bin/git.reset">git.reset</a><br>
+	│   ├── <a href="./bin/git.restore">git.restore</a><br>
+	│   ├── <a href="./bin/git.revert">git.revert</a><br>
+	│   ├── <a href="./bin/git.rev-parse">git.rev-parse</a><br>
+	│   ├── <a href="./bin/git.rm">git.rm</a><br>
+	│   ├── <a href="./bin/git.status">git.status</a><br>
+	│   ├── <a href="./bin/git.tag">git.tag</a><br>
+	│   ├── <a href="./bin/infra.status">infra.status</a><br>
+	│   ├── <a href="./bin/init">init</a><br>
+	│   ├── <a href="./bin/init.infra">init.infra</a><br>
+	│   ├── <a href="./bin/init.vcs">init.vcs</a><br>
+	│   ├── <a href="./bin/log">log</a><br>
+	│   ├── <a href="./bin/loop">loop</a><br>
+	│   ├── <a href="./bin/now">now</a><br>
+	│   ├── <a href="./bin/pip.install">pip.install</a><br>
+	│   ├── <a href="./bin/pkg.add">pkg.add</a><br>
+	│   ├── <a href="./bin/pkg.search">pkg.search</a><br>
+	│   ├── <a href="./bin/project.init">project.init</a><br>
+	│   ├── <a href="./bin/pull">pull</a><br>
+	│   ├── <a href="./bin/push">push</a><br>
+	│   ├── <a href="./bin/remove">remove</a><br>
+	│   ├── <a href="./bin/repo.archive">repo.archive</a><br>
+	│   ├── <a href="./bin/repo.import">repo.import</a><br>
+	│   ├── <a href="./bin/reset">reset</a><br>
+	│   ├── <a href="./bin/restore">restore</a><br>
+	│   ├── <a href="./bin/rev">rev</a><br>
+	│   ├── <a href="./bin/revert">revert</a><br>
+	│   ├── <a href="./bin/run">run</a><br>
+	│   ├── <a href="./bin/search">search</a><br>
+	│   ├── <a href="./bin/setup/">setup</a><br>
+	│   │   ├── <a href="./bin/setup/bash">bash</a><br>
+	│   │   ├── <a href="./bin/setup/gpu/">gpu</a><br>
+	│   │   │   └── <a href="./bin/setup/gpu/nvidia">nvidia</a><br>
+	│   │   ├── <a href="./bin/setup/lib/">lib</a><br>
+	│   │   │   ├── <a href="./bin/setup/lib/c">c</a><br>
+	│   │   │   ├── <a href="./bin/setup/lib/golang">golang</a><br>
+	│   │   │   └── <a href="./bin/setup/lib/python">python</a><br>
+	│   │   ├── <a href="./bin/setup/network/">network</a><br>
+	│   │   ├── <a href="./bin/setup/pkg/">pkg</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/aide">aide</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/android">android</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/docker">docker</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/etckeeper">etckeeper</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/git">git</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/git-repo">git-repo</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/helm">helm</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/k3s">k3s</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/kubectl">kubectl</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/nodejs">nodejs</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/openscap">openscap</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/spack">spack</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/terraform">terraform</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/tpm">tpm</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/utils">utils</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/vbox">vbox</a><br>
+	│   │   │   ├── <a href="./bin/setup/pkg/yubico">yubico</a><br>
+	│   │   │   └── <a href="./bin/setup/pkg/zarf">zarf</a><br>
+	│   │   ├── <a href="./bin/setup/provider/">provider</a><br>
+	│   │   │   └── <a href="./bin/setup/provider/aws">aws</a><br>
+	│   │   ├── <a href="./bin/setup/README.md">README.md</a><br>
+	│   │   ├── <a href="./bin/setup/runtime/">runtime</a><br>
+	│   │   │   ├── <a href="./bin/setup/runtime/enable">enable</a><br>
+	│   │   │   └── <a href="./bin/setup/runtime/install">install</a><br>
+	│   │   └── <a href="./bin/setup/storage/">storage</a><br>
+	│   ├── <a href="./bin/stream">stream</a><br>
+	│   ├── <a href="./bin/tag">tag</a><br>
+	│   ├── <a href="./bin/tag.add">tag.add</a><br>
+	│   ├── <a href="./bin/tag.create">tag.create</a><br>
+	│   ├── <a href="./bin/tag.delete">tag.delete</a><br>
+	│   ├── <a href="./bin/tag.list">tag.list</a><br>
+	│   ├── <a href="./bin/tag.remove">tag.remove</a><br>
+	│   ├── <a href="./bin/tag.rm">tag.rm</a><br>
+	│   ├── <a href="./bin/tag.show">tag.show</a><br>
+	│   ├── <a href="./bin/tag.sign">tag.sign</a><br>
+	│   ├── <a href="./bin/tar.split">tar.split</a><br>
+	│   ├── <a href="./bin/test/">test</a><br>
+	│   │   ├── <a href="./bin/test/branch">branch</a><br>
+	│   │   └── <a href="./bin/test/tag">tag</a><br>
+	│   ├── <a href="./bin/today">today</a><br>
+	│   ├── <a href="./bin/tree.graph">tree.graph</a><br>
+	│   ├── <a href="./bin/tree.html">tree.html</a><br>
+	│   ├── <a href="./bin/tz">tz</a><br>
+	│   ├── <a href="./bin/usb.status">usb.status</a><br>
+	│   └── <a href="./bin/volumes">volumes</a><br>
 	├── <a href="./doc/">doc</a><br>
+	│   ├── <a href="./doc/runtime-tree.dot">runtime-tree.dot</a><br>
+	│   ├── <a href="./doc/runtime-tree.json">runtime-tree.json</a><br>
+	│   └── <a href="./doc/runtime-tree.svg">runtime-tree.svg</a><br>
 	├── <a href="./etc/">etc</a><br>
+	│   ├── <a href="./etc/backup/">backup</a><br>
+	│   │   ├── <a href="./etc/backup/policy/">policy</a><br>
+	│   │   ├── <a href="./etc/backup/schedule/">schedule</a><br>
+	│   │   │   ├── <a href="./etc/backup/schedule/code">code</a><br>
+	│   │   │   └── <a href="./etc/backup/schedule/default">default</a><br>
+	│   │   └── <a href="./etc/backup/target/">target</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/destination/">destination</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; │   ├── <a href="./etc/backup/target/destination/pub.properties">pub.properties</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; │   ├── <a href="./etc/backup/target/destination/pub.volumes">pub.volumes</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; │   ├── <a href="./etc/backup/target/destination/test.properties">test.properties</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; │   └── <a href="./etc/backup/target/destination/test.volumes">test.volumes</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; └── <a href="./etc/backup/target/source/">source</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/home.exclude">home.exclude</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/home.include">home.include</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/home.properties">home.properties</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/properties.template">properties.template</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/runtime.exclude">runtime.exclude</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/runtime.include">runtime.include</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/runtime.properties">runtime.properties</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/system.exclude">system.exclude</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/system.include">system.include</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/system.properties">system.properties</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/test.exclude">test.exclude</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./etc/backup/target/source/test.include">test.include</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; └── <a href="./etc/backup/target/source/test.properties">test.properties</a><br>
+	│   ├── <a href="./etc/docker/">docker</a><br>
+	│   │   ├── <a href="./etc/docker/build.properties">build.properties</a><br>
+	│   │   ├── <a href="./etc/docker/Dockerfile">Dockerfile</a><br>
+	│   │   ├── <a href="./etc/docker/Dockerfile.template">Dockerfile.template</a><br>
+	│   │   ├── <a href="./etc/docker/login.properties">login.properties</a><br>
+	│   │   ├── <a href="./etc/docker/rm.properties">rm.properties</a><br>
+	│   │   └── <a href="./etc/docker/run.properties">run.properties</a><br>
+	│   ├── <a href="./etc/etckeeper/">etckeeper</a><br>
+	│   ├── <a href="./etc/project/">project</a><br>
+	│   ├── <a href="./etc/projects">projects</a><br>
+	│   └── <a href="./etc/projid">projid</a><br>
 	├── <a href="./index.html">index.html</a><br>
 	├── <a href="./lib/">lib</a><br>
+	│   ├── <a href="./lib/catalog/">catalog</a><br>
+	│   │   └── <a href="./lib/catalog/bin/">bin</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/catalog/bin/find">find</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/catalog/bin/MAKE-links">MAKE-links</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/catalog/bin/media.add">media.add</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/catalog/bin/media.catalog">media.catalog</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; └── <a href="./lib/catalog/bin/SETUP-catalog">SETUP-catalog</a><br>
+	│   ├── <a href="./lib/cpe/">cpe</a><br>
+	│   │   ├── <a href="./lib/cpe/fedora/">fedora</a><br>
+	│   │   │   ├── <a href="./lib/cpe/fedora/codecs">codecs</a><br>
+	│   │   │   ├── <a href="./lib/cpe/fedora/dnf">dnf</a><br>
+	│   │   │   ├── <a href="./lib/cpe/fedora/init">init</a><br>
+	│   │   │   ├── <a href="./lib/cpe/fedora/logitech">logitech</a><br>
+	│   │   │   ├── <a href="./lib/cpe/fedora/rootfs/">rootfs</a><br>
+	│   │   │   │   └── <a href="./lib/cpe/fedora/rootfs/etc/">etc</a><br>
+	│   │   │   │   &nbsp;&nbsp;&nbsp; └── <a href="./lib/cpe/fedora/rootfs/etc/ups/">ups</a><br>
+	│   │   │   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./lib/cpe/fedora/rootfs/etc/ups/nut.conf">nut.conf</a><br>
+	│   │   │   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./lib/cpe/fedora/rootfs/etc/ups/ups.conf">ups.conf</a><br>
+	│   │   │   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./lib/cpe/fedora/rootfs/etc/ups/upsd.conf">upsd.conf</a><br>
+	│   │   │   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./lib/cpe/fedora/rootfs/etc/ups/upsd.users">upsd.users</a><br>
+	│   │   │   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./lib/cpe/fedora/rootfs/etc/ups/upsmon.conf">upsmon.conf</a><br>
+	│   │   │   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; └── <a href="./lib/cpe/fedora/rootfs/etc/ups/upssched.conf">upssched.conf</a><br>
+	│   │   │   ├── <a href="./lib/cpe/fedora/rpmfusion">rpmfusion</a><br>
+	│   │   │   ├── <a href="./lib/cpe/fedora/ups">ups</a><br>
+	│   │   │   └── <a href="./lib/cpe/fedora/zram">zram</a><br>
+	│   │   ├── <a href="./lib/cpe/linux-common/">linux-common</a><br>
+	│   │   │   └── <a href="./lib/cpe/linux-common/rootfs/">rootfs</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; └── <a href="./lib/cpe/linux-common/rootfs/etc/">etc</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; └── <a href="./lib/cpe/linux-common/rootfs/etc/skel/">skel</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ├── <a href="./lib/cpe/linux-common/rootfs/etc/skel/dot-login">dot-login</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; └── <a href="./lib/cpe/linux-common/rootfs/etc/skel/dot-logout">dot-logout</a><br>
+	│   │   └── <a href="./lib/cpe/linux-desktop/">linux-desktop</a><br>
+	│   ├── <a href="./lib/FRAMEWORK/">FRAMEWORK</a><br>
+	│   │   ├── <a href="./lib/FRAMEWORK/INSTANCE/">INSTANCE</a><br>
+	│   │   └── <a href="./lib/FRAMEWORK/setup">setup</a><br>
+	│   ├── <a href="./lib/golang/">golang</a><br>
+	│   ├── <a href="./lib/jvm/">jvm</a><br>
+	│   ├── <a href="./lib/nodejs/">nodejs</a><br>
+	│   ├── <a href="./lib/python/">python</a><br>
+	│   │   └── <a href="./lib/python/version">version</a><br>
+	│   ├── <a href="./lib/shell/">shell</a><br>
+	│   │   ├── <a href="./lib/shell/bash/">bash</a><br>
+	│   │   │   ├── <a href="./lib/shell/bash/alias/">alias</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/alias/android">android</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/alias/du">du</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/alias/find">find</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/alias/mkdir">mkdir</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/alias/myalias">myalias</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/alias/runtime">runtime</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/alias/status">status</a><br>
+	│   │   │   │   └── <a href="./lib/shell/bash/alias/sudo">sudo</a><br>
+	│   │   │   ├── <a href="./lib/shell/bash/environment/">environment</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/android">android</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/dates">dates</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/docker">docker</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/git">git</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/go">go</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/helm">helm</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/java">java</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/kubectl">kubectl</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/linux">linux</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/modules">modules</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/nodejs">nodejs</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/node-latest">node-latest</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/project">project</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/prompt">prompt</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/provider">provider</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/python">python</a><br>
+	│   │   │   │   ├── <a href="./lib/shell/bash/environment/spack">spack</a><br>
+	│   │   │   │   └── <a href="./lib/shell/bash/environment/stack">stack</a><br>
+	│   │   │   └── <a href="./lib/shell/bash/function/">function</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/dates">dates</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/date_time_path">date_time_path</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/debug">debug</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/docker">docker</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/edit">edit</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/_error.test">_error.test</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/exits">exits</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/FRAMEWORK">FRAMEWORK</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/interactive">interactive</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/list_functions">list_functions</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/login">login</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/logout">logout</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/path">path</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/pkg">pkg</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/print">print</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/root">root</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/rsync">rsync</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/shells">shells</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/tar">tar</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/trap">trap</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/upstream">upstream</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/url">url</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/vcs">vcs</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a href="./lib/shell/bash/function/version">version</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; └── <a href="./lib/shell/bash/function/workspace">workspace</a><br>
+	│   │   ├── <a href="./lib/shell/fish/">fish</a><br>
+	│   │   ├── <a href="./lib/shell/ksh/">ksh</a><br>
+	│   │   ├── <a href="./lib/shell/README.txt">README.txt</a><br>
+	│   │   └── <a href="./lib/shell/zsh/">zsh</a><br>
+	│   ├── <a href="./lib/tree.dot">tree.dot</a><br>
+	│   └── <a href="./lib/tree.svg">tree.svg</a><br>
 	├── <a href="./LICENSE">LICENSE</a><br>
 	├── <a href="./opt/">opt</a><br>
 	├── <a href="./README.md">README.md</a><br>
 	├── <a href="./src/">src</a><br>
+	│   └── <a href="./src/README.md">README.md</a><br>
 	├── <a href="./TODO.txt">TODO.txt</a><br>
-	├── <a href="./tree.dot">tree.dot</a><br>
-	├── <a href="./tree.svg">tree.svg</a><br>
 	├── <a href="./usr/">usr</a><br>
+	│   ├── <a href="./usr/bin/">bin</a><br>
+	│   ├── <a href="./usr/include/">include</a><br>
+	│   └── <a href="./usr/lib/">lib</a><br>
 	└── <a href="./var/">var</a><br>
-	<br><br>
-	</p>
-	<p>
+	&nbsp;&nbsp;&nbsp; ├── <a href="./var/lib/">lib</a><br>
+	&nbsp;&nbsp;&nbsp; └── <a href="./var/log/">log</a><br>
+<br><br><p>
 
-8 directories, 6 files
-	<br><br>
-	</p>
+59 directories, 239 files
+
+</p>
 	<hr>
 	<p class="VERSION">
-		 tree v1.8.0 © 1996 - 2018 by Steve Baker and Thomas Moore <br>
+		 tree v2.1.0 © 1996 - 2022 by Steve Baker and Thomas Moore <br>
 		 HTML output hacked and copyleft © 1998 by Francesc Rocher <br>
 		 JSON output hacked and copyleft © 2014 by Florian Sesser <br>
 		 Charsets / OS/2 support © 2001 by Kyosuke Tokoro

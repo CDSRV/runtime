@@ -1,0 +1,1 @@
+## PURPOSE: setup any shell
