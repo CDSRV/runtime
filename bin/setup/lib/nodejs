@@ -73,12 +73,11 @@ esac #PKG_FORMAT
 
 NODEJS_HOME=$WORKSPACE/lib/nodejs/$NODEJS_REPO/$NODEJS_VERSION/${NODEJS_PKG%.${NODEJS_PKG_TYPE}}
 
-echo "NODEJS_HOME=$NODEJS_HOME" > $WORKSPACE/lib/bash/environment/node-$NODEJS_VERSION
-echo '[ -d $NODEJS_HOME ] && {(echo $PATH | grep $NODEJS_HOME &>/dev/null) || PATH=${NODEJS_HOME}/bin:$PATH;} || unset NODEJS_HOME' >> $WORKSPACE/lib/bash/environment/node-$NODEJS_VERSION
+echo "NODEJS_HOME=$NODEJS_HOME" > $WORKSPACE/lib/shell/$(basename $SHELL)/environment/node-$NODEJS_VERSION
+echo '[ -d $NODEJS_HOME ] && {(echo $PATH | grep $NODEJS_HOME &>/dev/null) || PATH=${NODEJS_HOME}/bin:$PATH;} || unset NODEJS_HOME' >> $WORKSPACE/lib/shell/$(basename $SHELL)/environment/node-$NODEJS_VERSION
 
 : test version
 ${NODEJS_HOME}/bin/node --version
 
-: 
+:
 tree -L 5 $WORKSPACE/lib/nodejs
-

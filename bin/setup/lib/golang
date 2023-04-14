@@ -71,13 +71,12 @@ echo "... creating environment variables in workspace"
         echo '[ -d "${GOROOT}" ] && ( echo $PATH | grep $GOROOT/bin &>/dev/null ) || PATH=$GOROOT/bin:$PATH'
         echo "GOPATH=$GOPATH"
 	echo '[ -d "${GOPATH}" ] && ( echo $PATH | grep $GOPATH/bin &>/dev/null ) || PATH=$GOPATH/bin:$PATH'
-    } >> "$WORKSPACE/lib/bash/environment/go-$GO_VERSION"
+    } >> "$WORKSPACE/lib/shell/$(basename $SHELL)/environment/go-$GO_VERSION"
 
 mkdir -p "${GOPATH}/"{src,pkg,bin}
 
 rm -f "$TEMP_DIRECTORY/go.tar.gz"
 
-. "$WORKSPACE/lib/bash/environment/go-$GO_VERSION"
+. "$WORKSPACE/lib/shell/$(basename $SHELL)/environment/go-$GO_VERSION"
 
 env | grep ^GO
-

@@ -23,7 +23,7 @@ touch "${TMP_DIR}/."
 ## https://github.com/kubernetes/kubectl/releases : looking good
 
 ## .. either supply a version number or a release tag
-KUBECTL_RELEASE=${1:-$(curl -L -s https://dl.k8s.io/release/stable.txt)} 
+KUBECTL_RELEASE=${1:-$(curl -L -s https://dl.k8s.io/release/stable.txt)}
 KUBECTL_VERSION=${KUBECTL_RELEASE//v/} ## because KEY=VALUE, not KEY=keyValue
 KUBECTL_VERSION=${KUBECTL_VERSION:?required}
 
@@ -53,7 +53,7 @@ type kubectl
 
 ## kubectl completion bash >/etc/bash_completion.d/kubectl # requires sudo
 
-#kubectl completion bash > ${WORKSPACE}/lib/bash/function/kubectl.completion
-#ls -la ${WORKSPACE}/lib/bash/function/kubectl.completion
+#kubectl completion bash > ${WORKSPACE}/lib/shell/$(basename $SHELL)/function/kubectl.completion
+#ls -la ${WORKSPACE}/lib/shell/$(basename $SHELL)/function/kubectl.completion
 
 ## workspace.reload to pick up the completion functions
