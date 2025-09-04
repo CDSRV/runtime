@@ -10,6 +10,8 @@
 
 set +o xtrace
 
+unset command_not_found_handle ## don't ask
+
 unset CDPATH
 
 ## REF: https://stackoverflow.com/questions/2683279/how-to-detect-if-a-script-is-being-sourced
