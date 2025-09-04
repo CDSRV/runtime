@@ -1,0 +1,5 @@
+## initialize workspace, load modules, state, etc
+for $PROVIDER in $PROVIDERS/*
+	do
+        $PROVIDERS/$PROVIDER/bin/status
+done

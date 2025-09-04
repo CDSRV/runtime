@@ -45,9 +45,9 @@ chmod 755 "${DEST}/kubectl"
 
 ls -la "${DEST}/kubectl"
 
-"${DEST}/kubectl" version --client
+type kubectl && "${DEST}/kubectl" version --client
 
-type kubectl
+
 
 ## TODO: setup bash completion / optional
 

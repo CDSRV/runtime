@@ -1,0 +1,3 @@
+set -x
+[ -z "${VAR}" ] && read VAR
+VAR=${VAR:-default}

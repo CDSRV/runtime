@@ -12,6 +12,7 @@ case_debug
 
 #case_test ## TODO
 
+NODEJS_VERSION=${NODEJS_VERSION:-$1}
 NODEJS_VERSION=${NODEJS_VERSION:-latest}
 
 [[ "$NODEJS_VERSION" = latest* ]] || NODEJS_VERSION=v${NODEJS_VERSION}
@@ -19,6 +20,9 @@ NODEJS_VERSION=${NODEJS_VERSION:-latest}
 ## REF: https://docs.npmjs.com/cli/v8/configuring-npm/package-json#engines
 
 NODEJS_REPO=nodejs.org/dist
+
+##
+. /etc/os-release
 
 OS=${OS,,} ## to lowercase
 
@@ -30,6 +34,7 @@ case $ARCH in
     { echo "ERROR: architecture spec translation missing"; exit 1; }
     ;;
 esac # ARCH # because a translation table is needed from /etc/os-release
+#
 
 NODEJS_PKG_TYPE=${NODEJS_PKG_TYPE:-tar.gz} # or tar.xz
 
@@ -37,19 +42,25 @@ NODEJS_PKG_TYPE=${NODEJS_PKG_TYPE:-tar.gz} # or tar.xz
 
 cd $WORKSPACE/lib/nodejs
 
-[[ "$NODEJS_VERSION" = latest* ]] && rm -rf $NODEJS_REPO/$NODEJS_VERSION
+# [[ "$NODEJS_VERSION" = latest* ]] && rm -rf $NODEJS_REPO/$NODEJS_VERSION
 
 : download signature files
 
 WGET_OPTIONS="-e robots=off --user-agent=Mozilla/5.0 --no-parent --continue --recursive --relative --level=1"
 
+[ -a $WORKSPACE/lib/nodejs/$NODEJS_REPO/$NODEJS_VERSION/SHASUMS256.txt ] || \
 wget $WGET_OPTIONS https://$NODEJS_REPO/$NODEJS_VERSION/SHASUMS256.txt
+
+[ -a $WORKSPACE/lib/nodejs/$NODEJS_REPO/$NODEJS_VERSION/SHASUMS256.txt.asc ] || \
 wget $WGET_OPTIONS https://$NODEJS_REPO/$NODEJS_VERSION/SHASUMS256.txt.asc
+
+[ -a $WORKSPACE/lib/nodejs/$NODEJS_REPO/$NODEJS_VERSION/SHASUMS256.txt.sig ] || \
 wget $WGET_OPTIONS https://$NODEJS_REPO/$NODEJS_VERSION/SHASUMS256.txt.sig
 
 : download PKG
 NODEJS_PKG=$(grep $OS-$ARCH.$NODEJS_PKG_TYPE $WORKSPACE/lib/nodejs/$NODEJS_REPO/$NODEJS_VERSION/SHASUMS256.txt |  awk '{print $2}')
 
+[ -a $WORKSPACE/lib/nodejs/$NODEJS_REPO/$NODEJS_VERSION/$NODEJS_PKG ] || \
 wget $WGET_OPTIONS https://$NODEJS_REPO/$NODEJS_VERSION/$NODEJS_PKG
 
 cd $WORKSPACE/lib/nodejs/$NODEJS_REPO/$NODEJS_VERSION/

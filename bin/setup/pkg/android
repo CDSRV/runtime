@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 
+case_debug
+set -e
+
 ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-$CATALOG/android}
 
-[ touch $ANDROID_SDK_ROOT ] || midir -p $ANDROID_SDK_ROOT
+[ -d $ANDROID_SDK_ROOT ] || mkdir -p $ANDROID_SDK_ROOT
 
 ANDROID_SDK_TOOLS_VERSION=7583922_latest
 ANDROID_SDK_TOOLS_URL=${ANDROID_SDK_TOOLS_URL:-https://dl.google.com/android/repository/commandlinetools-linux-$ANDROID_SDK_TOOLS_VERSION.zip}
 
 cd $ANDROID_SDK_ROOT
-mkdir latest && cd latest
+mkdir $ANDROID_SDK_TOOLS_VERSION && cd $ANDROID_SDK_TOOLS_VERSION 
 
 wget $ANDROID_SDK_TOOLS_URL
 unzip commandlinetools-linux-$ANDROID_SDK_TOOLS_VERSION.zip

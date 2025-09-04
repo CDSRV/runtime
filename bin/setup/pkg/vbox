@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+set -x
+set -e
+
+broken for fedora 38 secure boot
 
 ## setup virtualbox
 
@@ -9,17 +13,31 @@ BASE_URL=https://download.virtualbox.org/virtualbox
 REPO=$BASE_URL/rpm/fedora/virtualbox.repo
 
 TMP_DIR=${TMP_DIR:-/tmp}
-
-VERSION=${VBOX_VERSION:-$(curl -ls $BASE_URL/LATEST.TXT)}
+## TODO: rerlease channel
+VERSION=${VBOX_VERSION:-$(curl -ls $BASE_URL/LATEST-STABLE.TXT)}
 
 MAJOR_VERSION=${VERSION%.*}
 
 curl -ls $REPO -o /etc/yum.repos.d/virtualbox.repo
 
-yum install -y dkms kernel-devel
+yum install -y akmod-VirtualBox kernel-devel kmod
 
-yum install -y VirtualBox-$MAJOR_VERSION virtualbox-guest-additions
+yum install -y virtualbox-guest-additions ##  VirtualBox-$MAJOR_VERSION # conflicts with VirtualBox-Server
 
+## secure boot
+#mkdir -p /var/lib/shim-signed/mok
+## TODO: cert info
+#ls -la /var/lib/shim-signed/mok/MOK.priv || openssl req -nodes -new -x509 -newkey rsa:2048 -outform DER -addext "extendedKeyUsage=codeSigning" -keyout /var/lib/shim-signed/mok/MOK.priv -out /var/lib/shim-signed/mok/MOK.der
+#mokutil --import /var/lib/shim-signed/mok/MOK.der
+
+/usr/sbin/kmodgenca
+mokutil --import /etc/pki/akmods/certs/public_key.der
+
+ls -la /usr/lib/modules/$(uname -r)/extra
+#/sbin/vboxconfig
+modprobe vboxdrv
+## TODO
+#reboot && rcvboxdrv setup
 
 EXTPACK_SHA=$(curl -ls $BASE_URL/${VERSION}/SHA256SUMS | head -1 | awk '{print $1}' )
 
